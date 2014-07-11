@@ -1,0 +1,188 @@
+##############################################################################
+## A collection of 6 self-defined functions                                 ##
+## 1. co() - transform variable with carry-over rate                        ##
+## 2. pc() - transform variable with power curve rate                       ##
+## 3. sc() - transform variable with s curve rates                          ##
+## 4. meth.c.p() - find out best parameters for transforming with co()+pc() ##
+## 5. meth.c.s() - find out best parameters for transforming with co()+sc() ##
+## 6. cp.vs.cs() - compare the 2 methodology (4 & 5) and offer the best     ##
+##############################################################################
+
+##################################################
+# define carry-over rate transformation function #
+##################################################
+co <- function(variable, i){
+  var1 <- variable
+  for (p in (2:length(var1))){
+    var1[p] = var1[p-1] * i + var1[p]
+  }
+  return(var1)
+}
+
+###############################################
+# define power curver transformation function #
+###############################################
+pc <- function(variable, j){
+  var2 <- variable
+  var2 <- sapply(var2, function(x)return(x^j))
+  return(var2)
+}
+
+##########################################
+# define s-curve transformation function #
+##########################################
+sc <- function(variable, k, l){
+  var2 <- variable
+  for (q in (1:length(var2))){
+    var2[q] = 1 - exp(-k * var2[q]^l)
+  }
+  return(var2)
+}
+
+########################################
+# transform following method = co + pc #
+########################################
+meth.c.p <- function(pred, resp, data, model = NULL){
+  # make sure the raw data is already loaded into global environment
+  
+  df <- data
+  arsq <- NaN  # adjusted r-square
+  coef <- matrix(c(NaN,NaN), 1, 2)   # coefficient of the transformed predictor and its p-value of t-test
+  index <- matrix(c(NaN,NaN), 1, 2)  # combination of indexes i & j
+  
+  for (i in seq(0.05, 0.95, 0.05)){
+    # carry-over loop starting empirically from .4 to .95 by step .05
+    for (j in seq(0.4, 1, 0.05)){
+      # power-curve loop starting from .1 to 1 by step .05
+      df[[pred]] <- pc(co(df[[pred]], i), j)
+      #pred1 <- pc(co(data[[pred]], i), j)
+      
+      # check if the parameter selection is based on a existing model
+      if (is.null(model)){
+        mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
+
+      }else{
+        mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
+      }
+      pos <- which(names(coef(mdl)) == pred)
+
+      coef.test <- try(coef(summary(mdl))[pos,1],silent = TRUE)
+      if(inherits(coef.test, "try-error")) {
+        # next
+        cf <- NaN
+        pv <- NaN
+      }else{
+        cf <- coef(summary(mdl))[pos,1]
+        pv <- coef(summary(mdl))[pos,4]
+      }
+      arsq <- append(arsq, summary(mdl)$adj.r.square, length(arsq))
+      coef <- rbind(coef, c(cf, #coef(summary(mdl))[pos,1]
+                            pv))#coef(summary(mdl))[pos,4]
+      index <- rbind(index, c(i, j))
+      
+      ######################################################
+      ##                   SUPER IMPORTANT                ## 
+      ## Set back the original value at the end of a loop ##
+      ######################################################
+      df[[pred]] <- data[[pred]]
+    }
+  }
+
+  
+  arsq <- arsq[2:length(arsq)] # get rid of c(NaN, NaN) - the iniital values
+  index <- index[2:nrow(index),]  
+  coef <- coef[2:nrow(coef),]
+  summary <- as.data.frame(cbind(index, coef, arsq))
+  names(summary) <- c(paste("parameter",seq(1:ncol(coef)), sep = ""),
+                      "estimate","p-value", "adjusted.r.square")
+  write.csv(summary, paste("meth.c.p.",pred,".parameters.csv",sep=""))
+  message(paste("'meth.c.p.",pred,".parameters.csv' is generated.",sep=""))
+  
+  bestarsq <- round(match(max(arsq), arsq), digits = 0) # index of the highest value of adjusted r-square
+  
+  best <- list(max(arsq), index[bestarsq,], coef[bestarsq,])
+  
+  names(best) <- c("cp.maximum.arsq", "best.transformation.parameters", 
+                   "coef.and.p.value")
+  
+  return(best)
+}
+
+########################################
+# transform following method = co + sc #
+########################################
+meth.c.s <- function(pred, resp, data, model = NULL){
+  # make sure the raw data is already loaded into global environment
+  
+  df <- data
+  arsq <- NaN  # adjusted r-square
+  coef <- matrix(c(NaN,NaN), 1, 2)   # coefficient of the transformed predictor and its p-value of t-test
+  index <- matrix(c(NaN,NaN,NaN), 1, 3)  # combination of indexes i, k & l
+  
+  for (i in seq(0.05, 0.95, 0.05)){
+    for (k in seq(0.0001, 0.0009, 0.0001)){
+      for (l in seq(1.1, 1.9, 0.1)){
+        # s-curve loop concerning 2 parameters
+        df[[pred]] <- sc(co(df[[pred]], i), k, l)
+        
+        if (is.null(model)){
+          mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
+        }else{
+          mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
+        }
+        pos <- which(names(coef(mdl)) == pred)
+        
+        # test is the coefficient is available after transformation
+        coef.test <- try(coef(summary(mdl))[pos,1],silent = TRUE)
+        if(inherits(coef.test, "try-error")) {
+          # next
+          cf <- NaN
+          pv <- NaN
+        }else{
+          cf <- coef(summary(mdl))[pos,1]
+          pv <- coef(summary(mdl))[pos,4]
+        }
+        arsq <- append(arsq, summary(mdl)$adj.r.square, length(arsq))
+        coef <- rbind(coef, c(cf, #coef(summary(mdl))[pos,1]
+                              pv))  #coef(summary(mdl))[pos,4]
+        index <- rbind(index, c(i, k, l))
+
+        ######################################################
+        ##                   SUPER IMPORTANT                ## 
+        ## Set back the original value at the end of a loop ##
+        ######################################################
+        df[[pred]] <- data[[pred]]
+        
+      }
+    }
+  }
+  
+  arsq <- arsq[2:length(arsq)] # get rid of c(NaN, NaN) - the iniital values
+  index <- index[2:nrow(index),]  
+  coef <- coef[2:nrow(coef),]
+  summary <- as.data.frame(cbind(index, coef, arsq))
+  names(summary) <- c(paste("parameter",seq(1:ncol(coef)), sep = ""),
+                      "estimate","p-value", "adjusted.r.square")
+  write.csv(summary, paste("meth.c.s.",pred,".parameters.csv",sep=""))
+  message(paste("'meth.c.s.",pred,".parameters.csv' is generated.",sep=""))
+  
+  bestarsq <- round(match(max(arsq), arsq), digits = 0) # index of the highest value of adjusted r-square
+  
+  best <- list(max(arsq), index[bestarsq,], coef[bestarsq,])
+  
+  names(best) <- c("cs.maximum.arsq", "best.transformation.parameters", 
+                   "coef.and.p.value")
+  
+  return(best)
+}
+
+# compare the results between co() + pc() and co() + sc()
+cp.vs.cs <- function(pred, resp, data, model = NULL){
+  # make sure the raw data is already loaded into global environment
+  call("meth.c.p")
+  call("meth.c.s")
+  cp <- meth.c.p(pred, resp, data, model)
+  cs <- meth.c.s(pred, resp, data, model)
+  best <- as.list(c(cp, cs))
+  return(best)
+}
