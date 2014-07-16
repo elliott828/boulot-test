@@ -6,6 +6,7 @@
 ## 4. meth.c.p() - find out best parameters for transforming with co()+pc() ##
 ## 5. meth.c.s() - find out best parameters for transforming with co()+sc() ##
 ## 6. cp.vs.cs() - compare the 2 methodology (4 & 5) and offer the best     ##
+## 7. lm.lag() - produce lag data in both backward & forward direction      ##
 ##############################################################################
 
 ##################################################
@@ -185,4 +186,23 @@ cp.vs.cs <- function(pred, resp, data, model = NULL){
   cs <- meth.c.s(pred, resp, data, model)
   best <- as.list(c(cp, cs))
   return(best)
+}
+
+
+####################################
+# making lag data for linear model #
+####################################
+lm.lag <- function(var, data, i){
+  df <- data
+  for (iter in i){
+    if (i < 0){
+      df$new <- c(data[[var]][(abs(iter)+1):nrow(data)], rep(NaN, abs(iter)))
+      
+    }else{
+      df$new <- c(rep(NaN, iter), data[[var]][1:(nrow(data)-iter)])
+    }
+    colnames(df) <- c(names(df)[1:(ncol(df)-1)],
+                      paste(var, "lag", iter, sep=".")) 
+  }
+  return(df)
 }
