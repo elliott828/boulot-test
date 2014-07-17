@@ -14,7 +14,8 @@ AutoReg <- function(data){
   library(car)
   
   options(warn = 1)
-  fit <- NULL
+  fit <- NULL  # Assign NULL to model first 
+
 # --------------------------- #
 # STEP: read data file (loop) #
 # --------------------------- #
@@ -49,7 +50,6 @@ AutoReg <- function(data){
   }
   
   ndf <- df   # Prepare a new df for further data modification
-  model <- NULL  # Assign NULL to model first 
   
 # ----------------------------------------------------- #
 # STEP: Choose predictors for modeling (super big loop) #
@@ -81,7 +81,7 @@ AutoReg <- function(data){
           "  4. none", "", sep="\n")
         
         # assign transforming method to opt1
-        opt1 <- readline("Please enter an option number: ")
+        opt1 <- as.numeric(readline("Please enter an option number: "))
         if(opt1 %in% 1:4){
           break
         }else{
@@ -89,12 +89,15 @@ AutoReg <- function(data){
         }
       }
       
-      #ParaS(ini.pred, resp, ndf, model, opt1)
-      offer <- (ParaS(ini.pred, resp, ndf, model, opt1))
+      #ParaS(pred, resp, df, model = NULL, method = 3)
+      offer <- (ParaS(pred, resp, ndf, fit, opt1))
+      message("Per below you could find the statistics if we transform and model based on your choice:")
       print(offer)
       
       # Allocate the best combination of parameters
       if (opt1 == 1){
+        co.r <- offer$best.c.p.transform.parameters[1]
+        pc.r <- offer$best.c.p.transform.parameters[2]
         cat(
           "Do you agree to transform the variable with recommended parameters?",
           paste("carry over rate = ", co.r, sep=""),
@@ -102,11 +105,11 @@ AutoReg <- function(data){
           "  1. Yes",
           "  2. No", 
           " ",sep="\n")
-        opt2 <- readline("Hurry up! 1 or 2? ")
+        opt2 <- as.numeric(readline("Hurry up! 1 or 2? "))
         
         if(opt2 == 2){
-          co.r <- readline("Please suggest alternative carry over rate: ")
-          pc.r <- readline("Please suggest alternative power curve parameter: ")
+          co.r <- as.numeric(readline("Please suggest alternative carry over rate: "))
+          pc.r <- as.numeric(readline("Please suggest alternative power curve parameter: "))
           sc.1 <- NaN
           sc.2 <- NaN
         }else if(opt2 == 1){
@@ -119,25 +122,29 @@ AutoReg <- function(data){
         }
         
       }else if(opt1 == 2){
-        cat(
+        co.r <- offer$best.c.s.transform.parameters[1]
+        sc.1 <- offer$best.c.s.transform.parameters[2]
+        sc.2 <- offer$best.c.s.transform.parameters[3]
+        cat(          
           "Do you agree to transform the variable with recommended parameters?",
           paste("carry over rate = ", co.r, sep=""),
-          paste("power curve parameter = ", pc.r, sep=""),
+          paste("1st s curve parameter = ", sc.1, sep=""),
+          paste("2nd s curve parameter = ", sc.2, sep=""),
           "  1. Yes",
           "  2. No", 
           " ", sep="\n")
-        opt2 <- readline("Hurry up! 1 or 2? ")
+        opt2 <- as.numeric(readline("Hurry up! 1 or 2? "))
         
         if(opt2 == 2){
-          co.r <- readline("Please suggest alternative carry over rate: ")
-          sc.1 <- readline("Please suggest alternative value for the 1st s curve parameter: ")
-          sc.2 <- readline("Please suggest alternative value for the 2nd s curve parameter: ")
+          co.r <- as.numeric(readline("Please suggest alternative carry over rate: "))
+          sc.1 <- as.numeric(readline("Please suggest alternative value for the 1st s curve parameter: "))
+          sc.2 <- as.numeric(readline("Please suggest alternative value for the 2nd s curve parameter: "))
           pc.r <- NaN
         }else if(opt2 == 1){
           co.r <- offer$best.c.s.transform.parameters[1]
-          pc.r <- NaN
           sc.1 <- offer$best.c.s.transform.parameters[2]
           sc.2 <- offer$best.c.s.transform.parameters[3]
+          pc.r <- NaN
         }else{
           warning("Please enter the right number (1 or 2)!")
         }
@@ -147,10 +154,11 @@ AutoReg <- function(data){
             "  1. carry over + power curve",
             "  2. carry over + s curve",
             " ", sep = "\n")
-        appr <- readline("which one is preferred, 1 or 2? ")
+        appr <- as.numeric(readline("which one is preferred, 1 or 2? "))
         
         if (appr == 1){
-          
+          co.r <- offer$best.c.p.transform.parameters[1]
+          pc.r <- offer$best.c.p.transform.parameters[2]          
           cat(
             "Do you agree to transform the variable with recommended parameters?",
             paste("carry over rate = ", co.r, sep=""),
@@ -158,16 +166,14 @@ AutoReg <- function(data){
             "  1. Yes",
             "  2. No", 
             " ",sep="\n")
-          opt2 <- readline("Hurry up! 1 or 2? ")
+          opt2 <- as.numeric(readline("Hurry up! 1 or 2? "))
           
           if(opt2 == 2){
-            co.r <- readline("Please suggest alternative carry over rate: ")
-            pc.r <- readline("Please suggest alternative power curve parameter: ")
+            co.r <- as.numeric(readline("Please suggest alternative carry over rate: "))
+            pc.r <- as.numeric(readline("Please suggest alternative power curve parameter: "))
             sc.1 <- NaN
             sc.2 <- NaN
           }else if(opt2 == 1){
-            co.r <- offer$best.c.p.transform.parameters[1]
-            pc.r <- offer$best.c.p.transform.parameters[2]
             sc.1 <- NaN
             sc.2 <- NaN
           }else{
@@ -175,26 +181,26 @@ AutoReg <- function(data){
           }
           
         }else if (appr == 2){
-          
+          co.r <- offer$best.c.s.transform.parameters[1]
+          sc.1 <- offer$best.c.s.transform.parameters[2]
+          sc.2 <- offer$best.c.s.transform.parameters[3]
           cat(
             "Do you agree to transform the variable with recommended parameters?",
-            paste("carry over rate = ", co.r, sep=""),
-            paste("power curve parameter = ", pc.r, sep=""),
+            paste("carry over rate = ", co.r, sep = ""),
+            paste("1st s curve parameter = ", sc.1, sep = ""),
+            paste("2nd s curve parameter = ", sc.2, sep = ""),
             "  1. Yes",
             "  2. No", 
             " ", sep="\n")
-          opt2 <- readline("Hurry up! 1 or 2? ")
+          opt2 <- as.numeric(readline("Hurry up! 1 or 2? "))
           
           if(opt2 == 2){
-            co.r <- readline("Please suggest alternative carry over rate: ")
-            sc.1 <- readline("Please suggest alternative value for the 1st s curve parameter: ")
-            sc.2 <- readline("Please suggest alternative value for the 2nd s curve parameter: ")
+            co.r <- as.numeric(readline("Please suggest alternative carry over rate: "))
+            sc.1 <- as.numeric(readline("Please suggest alternative value for the 1st s curve parameter: "))
+            sc.2 <- as.numeric(readline("Please suggest alternative value for the 2nd s curve parameter: "))
             pc.r <- NaN
           }else if(opt2 == 1){
-            co.r <- offer$best.c.s.transform.parameters[1]
             pc.r <- NaN
-            sc.1 <- offer$best.c.s.transform.parameters[2]
-            sc.2 <- offer$best.c.s.transform.parameters[3]
           }else{
             warning("Please enter the right number (1 or 2)!")
           }
@@ -224,7 +230,7 @@ AutoReg <- function(data){
         
         # Build the model
         if (is.null(fit)){
-          fit <- lm(resp ~ pred, data = ndf, na.action = na.exclude)
+          fit <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = ndf, na.action = na.exclude)
         }else{
           fit <- update(fit, as.formula(sprintf('~. + %s', pred)), data = ndf)
         }
@@ -237,10 +243,12 @@ AutoReg <- function(data){
               "  2. No, I want to try other parameters",
               "  3. No, I want to try another variable",
               " ", sep = "\n")
-          ok.trans <- readline("Make your choice, 1, 2 or 3? ")
+          ok.trans <- as.numeric(readline("Make your choice, 1, 2 or 3? "))
           if(ok.trans %in% 1:3){
-            warning("There is no options other than 1, 2 and 3!")
-            break}
+            break
+          }else{
+            warning("There is no option other than 1, 2 and 3!")
+          }
         }
         
         if (ok.trans == 2){
@@ -251,18 +259,18 @@ AutoReg <- function(data){
                 "  1. carry over + power curve",
                 "  2. carry over + s curve",
                 " ", sep = "\n")
-            appr <- readline("which one is preferred, 1 or 2? ")
+            appr <- as.numeric(readline("which one is preferred, 1 or 2? "))
             
             if (appr == 1){
-              co.r <- readline("Please suggest alternative carry over rate: ")
-              pc.r <- readline("Please suggest alternative power curve parameter: ")
+              co.r <- as.numeric(readline("Please suggest alternative carry over rate: "))
+              pc.r <- as.numeric(readline("Please suggest alternative power curve parameter: "))
               sc.1 <- NaN
               sc.2 <- NaN
               break
             }else if (appr ==2){
-              co.r <- readline("Please suggest alternative carry over rate: ")
-              sc.1 <- readline("Please suggest alternative value for the 1st s curve parameter: ")
-              sc.2 <- readline("Please suggest alternative value for the 2nd s curve parameter: ")
+              co.r <- as.numeric(readline("Please suggest alternative carry over rate: "))
+              sc.1 <- as.numeric(readline("Please suggest alternative value for the 1st s curve parameter: "))
+              sc.2 <- as.numeric(readline("Please suggest alternative value for the 2nd s curve parameter: "))
               pc.r <- NaN
               break
             }else{
@@ -288,7 +296,7 @@ AutoReg <- function(data){
           "  3. No, Please show me the final model statistics (I had enough!)",
           " ", sep = "\n")
       
-      opt3 <- readline("Your choice: 1, 2 or 3? ")
+      opt3 <- as.numeric(readline("Your choice: 1, 2 or 3? "))
       if (opt3 %in% 1:3){
         break
       }else{
@@ -328,10 +336,6 @@ AutoReg <- function(data){
     }
     
   }
-  
-  
-
-
 
   
   # Repeat the explanatory variable selection loop
