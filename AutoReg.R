@@ -337,15 +337,9 @@ AutoReg <- function(data){
     
   }
 
-  
-  # Repeat the explanatory variable selection loop
-  # remember to ask if it is necessary to keep the new var. in the model
-  # intermedium model is called med.model
-  
-  # insert all dummy vars and test models
-  
-  # after all possibilities tried, build final model fin.fit and make a summary
-  # do another model using stepAIC()
-  # compare 2 models and get the best
+  # things to be realized in next version:
+  # - insert all dummy vars and test models
+  # - record the eventual combination of parameters for each variable, exportable to .csv as a list/data frame
+  # - MAPE, contribution rate, dwtest to become a part of model summary
   
 }
