@@ -20,8 +20,6 @@ r.ex <- function(){
   message("Don't be shy, just try! :P")
   
   no.ex <- function(){
-  # choose the number of set of exercises
-  
     cat("\n")
     repeat{
       cat("Please choose the set of training exercises listed below:",
@@ -30,11 +28,13 @@ r.ex <- function(){
           " 1.3 - Missing values",
           " 1.4 - Subsetting Vectors",
           " 1.5 - Matrices & Data Frame",
+          " ",
+          " 0. Exit this exercise program",
           " ", sep = "\n")
       no.set <- readline("Please enter the session number: ")
       # check1 <- regular expression
       # check2 <- no.set %in% c(seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))
-      if (no.set %in% c(seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))){
+      if (no.set %in% c(0, seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))){
         break
       }else{
         message("Just enter number of exercise set listed above please.")
@@ -43,7 +43,13 @@ r.ex <- function(){
       }
     }
     
-    if (no.set == 1.1){
+    no.set <- as.numeric(no.set)
+    if (no.set == 0){
+      cat("\n")
+      message("Bye-bye~~")
+      cat("\n")
+      # return(the.end())
+    }else if (no.set == 1.1){
       #---------------#
       # Exercises 1.1 #
       #---------------#
@@ -156,7 +162,7 @@ r.ex <- function(){
             "  5. a <- 2:9; b <- 3:5; a+b leads to an error message",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
-        ans.bis <- as.numeric(ans.bis)
+        ans.bis <- as.numeric(ans)
         if (ans.bis == 3){
           message("One question to go! Ganbade!")
           cat("\n")
@@ -215,6 +221,18 @@ r.ex <- function(){
         }
       }
       
+      cat("Exercise 1.1 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+      }
+      
       repeat{
         cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
         cat("\n")
@@ -222,6 +240,7 @@ r.ex <- function(){
           return(no.ex())
         }else if (toupper(cho) == "N"){
           message("c ya~")
+          cat("\n")
           break
         }else{
           message("Please only enter 'Y' or 'N'")
@@ -231,10 +250,19 @@ r.ex <- function(){
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
+    
+#     # dummy function
+#     the.end <- function(){
+#       conf <- "I won't let you see I'm gonna go"
+#     }
+#     the.end()
   }
   
   no.ex()
   
-  # CREATION: EXERCISE 1.1 BASIC INTRO & SEQUENCE; 8/4/2014
+  
+  
+  # CREATION: 8/4/2014. EXERCISE 1.1
+  # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; ADD EXERCISE STATISTICS
   
 }
