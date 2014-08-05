@@ -57,6 +57,7 @@ AutoReg <- function(data){
   }
   
   # Load packages
+  if (!"car" %in% rownames(installed.packages())) install.packages("car")
   if (!"zoo" %in% rownames(installed.packages())) install.packages("zoo")
   if (!"lmtest" %in% rownames(installed.packages())) install.packages("lmtest")
   library(car)     # 
