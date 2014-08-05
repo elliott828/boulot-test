@@ -34,7 +34,7 @@ ParaS <- function(pred, resp, data, model = NULL, method = 3){
     cp.vs.cs(pred, resp, data, model)
   }else if(method == 4){
     if (is.null(model)){
-      mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
+      mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df, na.action = na.exclude)
     }else{
       mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
     }
