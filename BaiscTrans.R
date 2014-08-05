@@ -15,7 +15,11 @@
 co <- function(variable, i){
   var1 <- variable
   for (p in (2:length(var1))){
-    var1[p] = var1[p-1] * i + var1[p]
+    if (is.na(var1[p-1])){
+      var1[p] = var1[p]
+    }else{
+      var1[p] = var1[p-1] * i + var1[p]
+    }
   }
   return(var1)
 }
