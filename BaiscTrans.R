@@ -6,7 +6,7 @@
 ## 4. meth.c.p() - find out best parameters for transforming with co()+pc() ##
 ## 5. meth.c.s() - find out best parameters for transforming with co()+sc() ##
 ## 6. cp.vs.cs() - compare the 2 methodology (4 & 5) and offer the best     ##
-## 7. lm.lag() - produce lag data in both backward & forward direction      ##
+## 7. lm.lag() - produce lagged data in both backward & forward direction   ##
 ##############################################################################
 
 ##################################################
@@ -64,7 +64,7 @@ meth.c.p <- function(pred, resp, data, model = NULL){
       
       # check if the parameter selection is based on a existing model
       if (is.null(model)){
-        mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df, na.action = na.exclude)
+        mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
 
       }else{
         mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
@@ -98,7 +98,7 @@ meth.c.p <- function(pred, resp, data, model = NULL){
   index <- index[2:nrow(index),]  
   coef <- coef[2:nrow(coef),]
   summary <- as.data.frame(cbind(index, coef, arsq))
-  names(summary) <- c(paste("parameter",seq(1:ncol(coef)), sep = ""),
+  names(summary) <- c(paste("parameter",seq(1:ncol(index)), sep = ""),
                       "estimate","p-value", "adjusted.r.square")
   write.csv(summary, paste("meth.c.p.",pred,".parameters.csv",sep=""))
   message(paste("'meth.c.p.",pred,".parameters.csv' is generated.",sep=""))
@@ -107,7 +107,7 @@ meth.c.p <- function(pred, resp, data, model = NULL){
   
   best <- list(max(arsq), index[bestarsq,], coef[bestarsq,])
   
-  names(best) <- c("cp.maximum.arsq", "best.transformation.parameters", 
+  names(best) <- c("cp.maximum.arsq", "best.c.p.transform.parameters", 
                    "coef.and.p.value")
   
   return(best)
@@ -131,13 +131,13 @@ meth.c.s <- function(pred, resp, data, model = NULL){
         df[[pred]] <- sc(co(df[[pred]], i), k, l)
         
         if (is.null(model)){
-          mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df, na.action = na.exclude)
+          mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
         }else{
           mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
         }
         pos <- which(names(coef(mdl)) == pred)
         
-        # test is the coefficient is available after transformation
+        # test if the coefficient is available after transformation
         coef.test <- try(coef(summary(mdl))[pos,1],silent = TRUE)
         if(inherits(coef.test, "try-error")) {
           # next
@@ -166,7 +166,7 @@ meth.c.s <- function(pred, resp, data, model = NULL){
   index <- index[2:nrow(index),]  
   coef <- coef[2:nrow(coef),]
   summary <- as.data.frame(cbind(index, coef, arsq))
-  names(summary) <- c(paste("parameter",seq(1:ncol(coef)), sep = ""),
+  names(summary) <- c(paste("parameter",seq(1:ncol(index)), sep = ""),
                       "estimate","p-value", "adjusted.r.square")
   write.csv(summary, paste("meth.c.s.",pred,".parameters.csv",sep=""))
   message(paste("'meth.c.s.",pred,".parameters.csv' is generated.",sep=""))
@@ -175,13 +175,15 @@ meth.c.s <- function(pred, resp, data, model = NULL){
   
   best <- list(max(arsq), index[bestarsq,], coef[bestarsq,])
   
-  names(best) <- c("cs.maximum.arsq", "best.transformation.parameters", 
+  names(best) <- c("cs.maximum.arsq", "best.c.s.transform.parameters", 
                    "coef.and.p.value")
   
   return(best)
 }
 
-# compare the results between co() + pc() and co() + sc()
+###########################################################
+# compare the results between co() + pc() and co() + sc() #
+###########################################################
 cp.vs.cs <- function(pred, resp, data, model = NULL){
   # make sure the raw data is already loaded into global environment
   call("meth.c.p")
@@ -191,7 +193,6 @@ cp.vs.cs <- function(pred, resp, data, model = NULL){
   best <- as.list(c(cp, cs))
   return(best)
 }
-
 
 ####################################
 # making lag data for linear model #
@@ -210,3 +211,5 @@ lm.lag <- function(var, data, i){
   }
   return(df)
 }
+
+
