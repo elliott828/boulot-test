@@ -60,7 +60,7 @@ meth.c.p <- function(pred, resp, data, model = NULL){
       
       # check if the parameter selection is based on a existing model
       if (is.null(model)){
-        mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
+        mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df, na.action = na.exclude)
 
       }else{
         mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
@@ -127,7 +127,7 @@ meth.c.s <- function(pred, resp, data, model = NULL){
         df[[pred]] <- sc(co(df[[pred]], i), k, l)
         
         if (is.null(model)){
-          mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df)
+          mdl <- lm(as.formula(sprintf('%s ~ %s', resp, pred)), data = df, na.action = na.exclude)
         }else{
           mdl <- update(model, as.formula(sprintf('~. + %s', pred)), data = df)
         }
