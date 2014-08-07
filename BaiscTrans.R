@@ -239,7 +239,7 @@ mdl.smry <- function(model, data, var){
   
   consolidation <- list(pre.summary, mape, dw)
   names(consolidation) <- c("SUMMARY", "MAPE", "DWTEST")
-  print(consolidation)
+  return(consolidation)
   
   # 8/7/2014: Creation - Creation of mdl.smry(), listing basic summary, MAPE and dwtest
 }
