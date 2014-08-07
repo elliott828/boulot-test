@@ -7,6 +7,7 @@
 ## 5. meth.c.s() - find out best parameters for transforming with co()+sc() ##
 ## 6. cp.vs.cs() - compare the 2 methodology (4 & 5) and offer the best     ##
 ## 7. lm.lag() - produce lagged data in both backward & forward direction   ##
+## 8. mdl.smry() - combination of basic model summary, MAPE & dwtest        ##
 ##############################################################################
 
 ##################################################
@@ -213,3 +214,32 @@ lm.lag <- function(var, data, i){
 }
 
 
+################################
+# necessary summary of a model #
+################################
+mdl.smry <- function(model, data, var){
+  if (!"lmtest" %in% rownames(installed.packages())) install.packages("lmtest")
+  library(lmtest)
+  
+  pre.summary <- summary(model)
+  
+  # MAPE (residual <- either residual from summary() or residual from proj())
+  proj.mdl <- proj(model)
+  abs.res <- abs(proj.mdl[,ncol(proj.mdl)])
+  a <- as.numeric(rownames(proj.mdl))
+  actual <- data[[var]][a]
+  actual[which(actual == 0)] <- mean(actual)
+  mape <- mean(abs.res/actual)
+  
+  # Durbin-Watson Test
+  dw <- dwtest(model)
+  
+  # Contribution Rate
+  # To be implemented
+  
+  consolidation <- list(pre.summary, mape, dw)
+  names(consolidation) <- c("SUMMARY", "MAPE", "DWTEST")
+  print(consolidation)
+  
+  # 8/7/2014: Creation - Creation of mdl.smry(), listing basic summary, MAPE and dwtest
+}
