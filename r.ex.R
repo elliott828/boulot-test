@@ -6,9 +6,11 @@ r.ex <- function(){
   
   # DEVELOPED FOR BH MSU R TRAINING
   # EXERCISES ARE PROVIDED BELOW FOR PRACTICE
-  # DEVELOPED BY MINGMIN
+  # AUTHOR: MINGMIN
   
   message("Welcome to MSU R training exercise system!")
+  cat("\n")
+  
   message("Every training session comes up with corresponding exercises.")
   message("No score will be granted.")
   message("Just practice and make sure you fully understand the content of training.")
