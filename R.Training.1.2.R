@@ -137,12 +137,38 @@ fee <- c("low", "medium", "medium", "high", "low")
 
 # how to create 2 types of factors?
 f.animal <- factor(animal)
-f.fee <- factor(fee, order = T, levels = c("low", "medium", "high"))
+f.fee <- factor(fee, ordered = T, levels = c("low", "medium", "high"))
+# parameter name "ordered" can be replaced by "order"
 
-#---------------------------------------------------------------------
+#-----------------------------------------a----------------------------
 
 # what if you are not satisfied on names of levels?
 # refer to name assignment of a vector
+
 test.gender <- f.gender
 levels(test.gender) <- c("M","F")
 
+test.gender
+# compare with
+f.gender
+
+# follow the order of level
+
+#---------------------------------------------------------------------
+# summarizing a factor
+# summary()
+
+summary(gender)
+# vs.
+summary(f.gender)
+
+# similar effect
+table(gender)
+# vs.
+table(f.gender)
+# same result
+# build contingency table
+
+
+#---------------------------------------------------------------------
+# finished on Mon. 8/18/2014
