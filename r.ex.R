@@ -279,7 +279,7 @@ r.ex <- function(){
             sep = "\n")
         ans <- readline("Your answer: ")
         ans.bis <- as.numeric(ans)
-        if (ans.bis == 2){
+        if (ans.bis == 2 | ans == "2"){
           message("Correct! Let's move to the next question.")
           cat("\n")
           break
@@ -316,7 +316,7 @@ r.ex <- function(){
             sep = "\n")
         ans <- readline("Your answer: ")
         ans.bis <- as.numeric(ans)
-        if (ans.bis == 3){
+        if (ans.bis == 3 | ans == "3"){
           message("Hoorey~ Corret answer!")
           cat("\n")
           break
@@ -358,7 +358,7 @@ r.ex <- function(){
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
         ans.bis <- as.numeric(ans)
-        if (ans.bis == 1){
+        if (ans.bis == 1 | ans == "1"){
           message("Great! You still have 2 questions to answer!")
           cat("\n")
           break
@@ -392,7 +392,7 @@ r.ex <- function(){
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
         ans.bis <- as.numeric(ans)
-        if (ans.bis == 3){
+        if (ans.bis == 3 | ans == "3"){
           message("One question to go! Ganbade!")
           cat("\n")
           break
@@ -426,7 +426,7 @@ r.ex <- function(){
         ans <- readline("Your answer: ")
         ans.bis <- as.numeric(ans)
         
-        if (ans.bis == 3){
+        if (ans.bis == 3 | ans == "3"){
           message("Congratulations! You have finished the exercise 1.1!")
           message("See you in next set of exercises~")
           cat("\n")
