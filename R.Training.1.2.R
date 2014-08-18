@@ -1,10 +1,7 @@
-source("https://raw.githubusercontent.com/elliott828/boulot-test/master/r.ex.R")
-r.ex()
-
-###############################
-## 1. BASIC CONCEPT          ##
-## 1.2 Basic Building Blocks ##
-###############################
+#########################
+## 1. BASIC CONCEPT    ##
+## 1.2 Vector & Factor ##
+#########################
 
 #-----------------#
 # Basic Data Type #
@@ -26,8 +23,8 @@ F
 logi <- F
 
 # characters
-"Hello World"
-char <- "Hello World"
+# "Hello MSUers"
+char <- "Hello MSUers"
 
 # check the data type
 # function class()
@@ -42,7 +39,7 @@ type4
 class(type1)
 
 inte <- c(5L)
-
+class(inte)
 #=====================================================================
 
 #--------#
@@ -71,11 +68,10 @@ exp <- c(-80, -120, -300, -80, -200)
 # World cup lottery
 wc <- c(400, -80, -40, 200, -120)
 
-# add workday to vector
+# assign names of workday to vector
 # names()
 names(wc) <- c("Mon", "Tue", "Wed", "Thu", "Fri")
 wc
-#---------------------------------------------------------------------
 
 # to name all - assign a vector to a vector
 workday <- c("Mon", "Tue", "Wed", "Thu", "Fri")
@@ -100,7 +96,7 @@ balance.bis
 #---------------------------------------------------------------------
 
 # comparing vectors
-# which method help you earning more money?
+# which method helps you earn more money?
 answer1 <- sal > wc
 answer2 <- sum(sal) > sum(wc)
 answer1
@@ -171,4 +167,19 @@ table(f.gender)
 
 
 #---------------------------------------------------------------------
+# Session 1.2 Review
+# - Basic data type
+#   * numeric, integer, character, logic
+#   * class()
+# - Vector
+#   * a vector can only store the values of same data type
+#   * naming a vector: names()
+#   * comparing vectors
+# - Factor
+#   * concept
+#   * creation of factor (ordinal / nominal)
+#   * change the categories / levels of factor
+#   * summarizing factors
+#---------------------------------------------------------------------
+
 # finished on Mon. 8/18/2014
