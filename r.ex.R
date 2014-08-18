@@ -137,12 +137,11 @@ r.ex <- function(){
             "",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
-        ans.bis <- as.numeric(ans)
-        if (ans.bis == 3){
+        if (ans == "3"){
           message("Great! You still have 2 questions to answer!")
           cat("\n")
           break
-        }else{
+        }else if(ans %in% c("1", "2", "4", "5")){
           q3 <- q3 + 1
           
           if (q3>3){
@@ -154,6 +153,10 @@ r.ex <- function(){
             message("Ah-oh~ try again please~")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 5 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -169,12 +172,11 @@ r.ex <- function(){
             "",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
-        ans.bis <- as.numeric(ans)
-        if (ans.bis == 3){
+        if (ans == "3"){
           message("One question to go! Ganbade!")
           cat("\n")
           break
-        }else{
+        }else if(ans %in% c("1", "2", "4", "5")){
           q4 <- q4 + 1
           
           if (q4>3){
@@ -187,6 +189,10 @@ r.ex <- function(){
             message("Come on~ Try again!")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 5 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -205,14 +211,12 @@ r.ex <- function(){
             "",
             sep = "\n")
         ans <- readline("Your answer: ")
-        ans.bis <- as.numeric(ans)
-        
-        if (ans.bis == 1){
+        if (ans == "1"){
           message("Congratulations! You have finished the exercise 1.1!")
           message("See you in next set of exercises~")
           cat("\n")
           break
-        }else{
+        }else if(ans %in% c("2", "3", "4")){
           q5 <- q5 + 1
           
           if (q5>3){
@@ -226,6 +230,10 @@ r.ex <- function(){
             message("Try~~~~again~~~~~")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -278,12 +286,12 @@ r.ex <- function(){
             "",
             sep = "\n")
         ans <- readline("Your answer: ")
-        ans.bis <- as.numeric(ans)
-        if (ans.bis == 2 | ans == "2"){
+        # ans.bis <- as.numeric(ans)
+        if (ans == "2"){
           message("Correct! Let's move to the next question.")
           cat("\n")
           break
-        }else{
+        }else if (ans %in% c("1", "3", "4")){
           q1 <- q1 + 1
           
           if(q1>3){
@@ -297,6 +305,10 @@ r.ex <- function(){
             message("Just enter a number between 1 and 4, without any other characters.")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -315,12 +327,11 @@ r.ex <- function(){
             "",
             sep = "\n")
         ans <- readline("Your answer: ")
-        ans.bis <- as.numeric(ans)
-        if (ans.bis == 3 | ans == "3"){
+        if (ans == "3"){
           message("Hoorey~ Corret answer!")
           cat("\n")
           break
-        }else{
+        }else if (ans %in% c("1", "2", "4")){
           q2 <- q2 + 1
           
           if (q2>3){
@@ -332,6 +343,10 @@ r.ex <- function(){
             message("Bang-bang! Try again please")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -346,23 +361,25 @@ r.ex <- function(){
             "  1. > summary(random); and we get:",
             "     Min. 1st Qu.  Median    Mean 3rd Qu.    Max.",
             "     -120     -80     -40      72     200     400 ",
+            "",
             "  2. > table(random); and we get:",
             "     random",
             "     Mon  Tue  Wed  Thu  Fri ",
             "     400  -80  -40  200 -120",
+            "",
             "  3. > levels(random); and we get:",
             '     [1] "Mon" "Tue" "Wed" "Thu" "Fri"',
-            "  4. > name(random);",
+            "",
+            "  4. > name(random); and we get:",
             '     [1] "Mon" "Tue" "Wed" "Thu" "Fri"',
             "",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
-        ans.bis <- as.numeric(ans)
-        if (ans.bis == 1 | ans == "1"){
+        if (ans == "1"){
           message("Great! You still have 2 questions to answer!")
           cat("\n")
           break
-        }else{
+        }else if(ans %in% c("2", "3", "4")){
           q3 <- q3 + 1
           
           if (q3>3){
@@ -377,6 +394,10 @@ r.ex <- function(){
             message("Ah-oh~ try again please~")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -384,19 +405,18 @@ r.ex <- function(){
       q4 <- 1
       repeat{
         cat("Q4. Which expression below is FALSE?",
-            "  1. if 'ordered' is not specified, levels adapt aphabetic order without priority;",
+            "  1. if 'ordered' is not specified, levels adapt alphabetic order without priority;",
             "  2. comparing a ordinal factor with a nominal one leads to an error message;",
             "  3. in factor(), parameters 'order' and 'ordered' have different functionality;",
             "  4. changing names of levels without considering order may lead to wrong info.",
             "",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
-        ans.bis <- as.numeric(ans)
-        if (ans.bis == 3 | ans == "3"){
+        if (ans == "3"){
           message("One question to go! Ganbade!")
           cat("\n")
           break
-        }else{
+        }else if(ans %in% c("1", "2", "4")){
           q4 <- q4 + 1
           
           if (q4>3){
@@ -408,6 +428,10 @@ r.ex <- function(){
             message("Come on~ Try again!")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -424,14 +448,12 @@ r.ex <- function(){
             "",
             sep = "\n")
         ans <- readline("Your answer: ")
-        ans.bis <- as.numeric(ans)
-        
-        if (ans.bis == 3 | ans == "3"){
+        if (ans == "3"){
           message("Congratulations! You have finished the exercise 1.1!")
           message("See you in next set of exercises~")
           cat("\n")
           break
-        }else{
+        }else if(ans %in% c("1", "2", "4")){
           q5 <- q5 + 1
           
           if (q5>3){
@@ -445,6 +467,10 @@ r.ex <- function(){
             message("Try~~~~again~~~~~")
             cat("\n")
           }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
         }
       }
       
@@ -494,5 +520,6 @@ r.ex <- function(){
   # CREATION: 8/4/2014. EXERCISE 1.1
   # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; ADD EXERCISE STATISTICS
   # UPDATE2: 8/18/2014. EXERCISE 1.2
+  # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
   
 }
