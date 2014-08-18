@@ -26,7 +26,7 @@ r.ex <- function(){
     repeat{
       cat("Please choose the set of training exercises listed below:",
           " 1.1 - Basic Intro & Sequence",
-          " 1.2 - Vector & List",
+          " 1.2 - Vector & Factor",
           " 1.3 - Missing values",
           " 1.4 - Subsetting Vectors",
           " 1.5 - Matrices & Data Frame",
