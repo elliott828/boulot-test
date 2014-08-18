@@ -65,7 +65,9 @@ r.ex <- function(){
       # Question 1
       q1 <- 1 # initialize the count of answer times
       repeat{
-        cat("Q1. Please enter the result of '3^2 + 17%%3'")
+        cat("Q1. Please enter the result of '3^2 + 17%%3'",
+            "",
+            sep = "\n")
         ans <- readline("Your answer: ")
         ans.bis <- as.numeric(ans)
         if (ans.bis == 11){
@@ -98,6 +100,7 @@ r.ex <- function(){
             "> pear <- 7",
             "> fruit <- apple + banana + pear",
             "What's the value of variable 'fruit'?",
+            "",
             sep = "\n")
         ans <- readline("Your answer: ")
         ans.bis <- as.numeric(ans)
@@ -131,6 +134,7 @@ r.ex <- function(){
             "  3. seq(40, 4, 4)",
             "  4. 1:10 * 4",
             "  5. seq(4, 40, length = 10)",
+            "",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
         ans.bis <- as.numeric(ans)
@@ -161,7 +165,8 @@ r.ex <- function(){
             "  2. pi:5 creates vector: 3.141593 4.141593",
             "  3. a <- 1:5; b <- seq(2,10,2); then b/a equals to 2",
             "  4. a <- 1:5; b <- 6:10; then b%*%a equals to 1*1 matrice",
-            "  5. a <- 2:9; b <- 3:5; a+b leads to an error message",
+            "  5. a <- 2:9; b <- 3:5; a+b leads to an warning message",
+            "",
             sep = "\n")
         ans <- readline("Your answer (enter the option number): ")
         ans.bis <- as.numeric(ans)
@@ -197,6 +202,7 @@ r.ex <- function(){
             "  2. 16 19 24 27 30 21 24 29 32 35",
             "  3. 19 21 23 26 29",
             "  4. 16 19 24 27 30",
+            "",
             sep = "\n")
         ans <- readline("Your answer: ")
         ans.bis <- as.numeric(ans)
@@ -249,15 +255,236 @@ r.ex <- function(){
         }
       }
       
+    }else if(no.set == 1.2){
+      #---------------#
+      # Exercises 1.2 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 1.2 - Vector & Factor"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 5 questions below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat("Q1. > vect <- c(3, 1, 2, 4)",
+            "which statement below is right?",
+            "  1. the data type of 'vect' is integer",
+            "  2. the data type of 'vect' is numeric",
+            "  3. > vect1 <- c(vect, FALSE); then vect1 is a vector of 5 logical values",
+            "  4. > vect2 <- c(vect, FALSE, 'A'); vect2 is still a numeric vector",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        ans.bis <- as.numeric(ans)
+        if (ans.bis == 2){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else{
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer below:")
+            message("The data type of 'vect' is numeric!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+        }
+      }
+      
+      # Question 2
+      q2 <- 1
+      repeat{
+        cat("Q2. 2 vectors of daily spends are created:",
+            "> XiaoJuan <- c(125, 130, 135, 242, 163)",
+            "> XiaoFang <- c(132, 184, 162, 212, 182)",
+            "",
+            "Which of the following is right?",
+            "  1. XiaoJuan > XiaoFang",
+            "  2. sum(XiaoJuan) > sum(XiaoFang)",
+            "  3. Total spends can be calculated by command: > sum(XiaoJuan, XiaoFang)",
+            "  4. Total spends can be calculated by command: > XiaoJuan + XiaoFang",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        ans.bis <- as.numeric(ans)
+        if (ans.bis == 3){
+          message("Hoorey~ Corret answer!")
+          cat("\n")
+          break
+        }else{
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The only right answer is 3.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+        }
+      }
+      
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Run the following commands:",
+            '> random <- c(400, -80, -40, 200, -120)',
+            '> names(random) <- c("Mon", "Tue", "Wed", "Thu", "Fri")',
+            "",
+            "Which option is right?",
+            "  1. > summary(random); and we get:",
+            "     Min. 1st Qu.  Median    Mean 3rd Qu.    Max.",
+            "     -120     -80     -40      72     200     400 ",
+            "  2. > table(random); and we get:",
+            "     random",
+            "     Mon  Tue  Wed  Thu  Fri ",
+            "     400  -80  -40  200 -120",
+            "  3. > levels(random); and we get:",
+            '     [1] "Mon" "Tue" "Wed" "Thu" "Fri"',
+            "  4. > name(random);",
+            '     [1] "Mon" "Tue" "Wed" "Thu" "Fri"',
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        ans.bis <- as.numeric(ans)
+        if (ans.bis == 1){
+          message("Great! You still have 2 questions to answer!")
+          cat("\n")
+          break
+        }else{
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("You have run out of 3 trials...")
+            message("The correct answer is 1.")
+            message("  - Using table() on a vector gets only counts of each value;")
+            message("  - levels() is used for factor instead of a vector with names;")
+            message("  - There is no functoin name(), only names() is available. :P")
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+        }
+      }
+      
+      # Question 4
+      q4 <- 1
+      repeat{
+        cat("Q4. Which expression below is FALSE?",
+            "  1. if 'ordered' is not specified, levels adapt aphabetic order without priority;",
+            "  2. comparing a ordinal factor with a nominal one leads to an error message;",
+            "  3. in factor(), parameters 'order' and 'ordered' have different functionality;",
+            "  4. changing names of levels without considering order may lead to wrong info.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        ans.bis <- as.numeric(ans)
+        if (ans.bis == 3){
+          message("One question to go! Ganbade!")
+          cat("\n")
+          break
+        }else{
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 3rd option.")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+        }
+      }
+      
+      # Question 5
+      q5 <- 1
+      repeat{
+        cat("Q5. Check the commands below:",
+            '> animal <- c("puppy", "piggy", "donkey", "monkey", "kitty") # Line 1',
+            "> zoo <- c(rep(c(1, 2), each = 3), 3)                        # Line 2",
+            "> names(zoo) <- animal                                       # Line 3",
+            "> summary(zoo)                                               # Line 4",
+            "> f.zoo <- factor(zoo, order = T)                            # Line 5",
+            "Which line will lead to error message (no. of line)?",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        ans.bis <- as.numeric(ans)
+        
+        if (ans.bis == 3){
+          message("Congratulations! You have finished the exercise 1.1!")
+          message("See you in next set of exercises~")
+          cat("\n")
+          break
+        }else{
+          q5 <- q5 + 1
+          
+          if (q5>3){
+            message("You have tried 3 times...")
+            message("The correct answer is 3. length of 'zoo' is longer than that of 'animal'.")
+            message("You can enter 'r.ex()' again to do this exercise again.")
+            message("See you around~")
+            cat("\n")
+            break
+          }else{
+            message("Try~~~~again~~~~~")
+            cat("\n")
+          }
+        }
+      }
+      
+      cat("Exercise 1.2 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+      }
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'")
+        }
+      }
+      
+      
+      
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
     
-#     # dummy function
-#     the.end <- function(){
-#       conf <- "I won't let you see I'm gonna go"
-#     }
-#     the.end()
+    #     # dummy function
+    #     the.end <- function(){
+    #       conf <- "I won't let you see I'm gonna go"
+    #     }
+    #     the.end()
   }
   
   no.ex()
@@ -266,5 +493,6 @@ r.ex <- function(){
   
   # CREATION: 8/4/2014. EXERCISE 1.1
   # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; ADD EXERCISE STATISTICS
+  # UPDATE2: 8/18/2014. EXERCISE 1.2
   
 }
