@@ -169,7 +169,7 @@ table(f.gender)
 #---------------------------------------------------------------------
 # Session 1.2 Review
 # - Basic data type
-#   * numeric, integer, character, logic
+#   * numeric, integer, character, logical
 #   * class()
 # - Vector
 #   * a vector can only store the values of same data type
@@ -179,7 +179,7 @@ table(f.gender)
 #   * concept
 #   * creation of factor (ordinal / nominal)
 #   * change the categories / levels of factor
-#   * summarizing factors
+#   * summarizing factors: summary()
 #---------------------------------------------------------------------
 
 # finished on Mon. 8/18/2014
