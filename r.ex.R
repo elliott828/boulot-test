@@ -449,7 +449,7 @@ r.ex <- function(){
             sep = "\n")
         ans <- readline("Your answer: ")
         if (ans == "3"){
-          message("Congratulations! You have finished the exercise 1.1!")
+          message("Congratulations! You have finished the exercise 1.2!")
           message("See you in next set of exercises~")
           cat("\n")
           break
