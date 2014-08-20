@@ -444,10 +444,10 @@ r.ex <- function(){
             "> names(zoo) <- animal                                       # Line 3",
             "> summary(zoo)                                               # Line 4",
             "> f.zoo <- factor(zoo, order = T)                            # Line 5",
-            "Which line will lead to error message (no. of line)?",
+            "Which line will lead to a problem (not necessarily an error or warning message)?",
             "",
             sep = "\n")
-        ans <- readline("Your answer: ")
+        ans <- readline("Your answer (no. of line): ")
         if (ans == "3"){
           message("Congratulations! You have finished the exercise 1.2!")
           message("See you in next set of exercises~")
