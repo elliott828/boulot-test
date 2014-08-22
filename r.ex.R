@@ -27,16 +27,15 @@ r.ex <- function(){
       cat("Please choose the set of training exercises listed below:",
           " 1.1 - Basic Intro & Sequence",
           " 1.2 - Vector & Factor",
-          " 1.3 - Missing values",
-          " 1.4 - Subsetting Vectors",
-          " 1.5 - Matrices & Data Frame",
+          " 1.3 - Matrix, Data Frame & Subsetting",
+          " 1.4 - List & Missing Values",
           " ",
           " 0. Exit this exercise program",
           " ", sep = "\n")
       no.set <- readline("Please enter the session number: ")
       # check1 <- regular expression
       # check2 <- no.set %in% c(seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))
-      if (no.set %in% c(0, seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))){
+      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))){
         break
       }else{
         message("Just enter number of exercise set listed above please.")
@@ -469,7 +468,7 @@ r.ex <- function(){
           }
         }else{
           cat("\n")
-          message("Only numbers between 1 and 4 are acceptable!")
+          message("Only numbers between 1 and 5 are acceptable!")
           cat("\n")
         }
       }
@@ -499,6 +498,69 @@ r.ex <- function(){
           message("Please only enter 'Y' or 'N'")
         }
       }
+       
+    }else if (no.set == 1.3){
+      
+      #---------------#
+      # Exercises 1.3 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 1.3 - Matrix, Data Frame & Subsetting"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 10 exercises below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat("Q1. Which command CANNOT get the matrix/data frame correctly named?",
+            "  1. > a <- matrix(1:12, 3, 4,", 
+            "                   dimnames = c('row1','row2','row3',",
+            "                                'col1','col2','col3','col4'))",
+            "",
+            "  2. > a <- matrix(1:12, 3, 4)",
+            "     > rownames(a) <- c('row1','row2','row3')",
+            "     > colnames(a) <- c('col1','col2','col3','col4')",
+            "",
+            "  3. > b <- data.frame(matrix(1:12, 3 ,4))",
+            "     > rownames(b) <- c('row1','row2','row3')",
+            "     > colnames(b) <- c('col1','col2','col3','col4')",
+            "",
+            "  4. > b <- data.frame(matrix(1:12, 3 ,4))",
+            "     > names(b) <- c('col1','col2','col3','col4')",
+            "     > row.names(b) <- c('row1','row2','row3')",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        # ans.bis <- as.numeric(ans)
+        if (ans == "1"){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "4")){
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer below:")
+            message("The value of argument 'dimnames' should be a 'list'!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      
+      
       
       
       
