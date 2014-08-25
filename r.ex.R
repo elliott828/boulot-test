@@ -742,7 +742,7 @@ r.ex <- function(){
                 "  1. WINDOWS",
                 "  2. OS X", "", sep="\n")
             syst <- as.numeric(readline("Your system? "))
-            
+            cat("\n")
             if(!syst %in% as.character(c(1,2))){
               message("Please enter valid number!")
             }else if(syst == 1){
@@ -759,9 +759,12 @@ r.ex <- function(){
             }
           }
           
+          na <- readline("Press 'ENTER' for continue...")
+          cat("\n")
           
           # opt ex 1.3.1
-          extra1.3.1 <- c("PLEASE FOLLOW THE INSTRUCTION:",
+          extra1.3.1 <- c("SESSION 1.3, EXTRA EX.1",
+                          "PLEASE FOLLOW THE INSTRUCTION:",
                           "1. Call the built-in dataset: mtcars;",
                           "2. Type '?mtcars' to read the introduction of this dataset;",
                           "3. Use head(), tail(), str() to check its basic structure;",
@@ -782,8 +785,12 @@ r.ex <- function(){
           message("But don't be scared, no point will be substracted even you submit wrong answer.")
           cat("\n")
           
+          na <- readline("If you are clear about the ex.1, press 'ENTER' to read ex.2...")
+          cat("\n")
+          
           # opt ex 1.3.2
-          extra1.3.2 <- c("PLEASE FOLLOW THE INSTRUCTION:",
+          extra1.3.2 <- c("SESSION 1.3, EXTRA EX.2",
+                          "PLEASE FOLLOW THE INSTRUCTION:",
                           "1. Call the built-in dataset: mtcars;",
                           "2. Subset a dataset from mtcars which meets conditions below:",
                           "   a) Allocate the top and bottom 3 cars by invesgating their horsepower;",
@@ -807,10 +814,10 @@ r.ex <- function(){
           cat("\n")
           message("You only have one chance to submit this exercise. :P")
           message("Don't mix up the order of variables in this dataset.")
-          message("Don't type extra.ex() until you are 100% sure about your answer.")
+          message("Don't type extra.ex() before you are 100% sure about your answer.")
           cat("\n")
           
-          message("ENJOY LAH~")
+          message("ENJOY THE EXERCISE LAH~")
           cat("\n")
           
           break
@@ -856,5 +863,4 @@ r.ex <- function(){
   # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
   # UPDATE4: 8/22/2014. EXERCISES 1.3
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
-  
 }
