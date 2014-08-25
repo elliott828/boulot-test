@@ -508,7 +508,7 @@ r.ex <- function(){
       msm <- "Training Exercise 1.3 - Matrix, Data Frame & Subsetting"
       message(msm)
       message(rep("-", nchar(msm)))
-      message("There are 10 exercises below for this training session.")
+      message("There are 5 exercises and 2 optional ones below for this training session.")
       cat("\n")
       
       # Question 1
@@ -563,9 +563,9 @@ r.ex <- function(){
       q2 <- 1
       repeat{
         cat("Q2. Which statements below is FALSE:",
-            "  1. Matrix can only store one data type;",
+            "  1. A matrix can only store one data type;",
             "  2. Data frame is often used for complicated data analysis because of",
-            "     its capability of storing multiple data type;",
+            "     its capability of storing multiple data types;",
             "  3. Functions like colSums(), rowMeans(), etc. can only be used on matrix;",
             "  4. Functions data.frame() and as.data.frame() have same effect when we want",
             "     to coerce a matrix to data frame without considering column names.",
@@ -637,7 +637,7 @@ r.ex <- function(){
       q4 <- 1
       repeat{
         cat("Q4. Which expression below is FALSE concerning a dataset 'df' with more than 10",
-            "    observations and more than 5 numeric variables?"
+            "    observations and more than 5 numeric variables?",
             "  1. head(df) returns the first 5 rows of 'df';",
             "  2. str(df) returns the structure of 'df';",
             "  3. tail(df) == df[(nrow(df)-5):nrow(df),];",
@@ -679,10 +679,10 @@ r.ex <- function(){
             "> df <- data.frame(a,b,c)",
             "",
             "Which combination below is TRUE?",
-            "1. > is.vector(df$a) & is.matrix(df)"
-            "2. > is.character(df$c) & is.logical(df$b)"
-            "3. > (is.data.frame(df) | is.character(df$c)) & sum(df$a)==11"
-            "4. > is.numeric(as.matrix(df)[,1])"
+            "1. > is.vector(df$a) & is.matrix(df)",
+            "2. > is.character(df$c) & is.logical(df$b)",
+            "3. > (is.data.frame(df) | is.character(df$c)) & sum(df$a)==11",
+            "4. > is.numeric(as.matrix(df)[,1])",
             "",
             sep = "\n")
         ans <- readline("Your answer (no. of line): ")
@@ -725,6 +725,101 @@ r.ex <- function(){
         message("You made no mistake at all in this set of exercise! Congratulations!")
       }
       
+      # optional exercises 1.3
+      repeat{
+        opt <- readline("Do you want to do 2 more optional exercises (Y/N)?")
+        cat("\n")
+        if (toupper(opt) == "Y"){
+          message("Da~da~. You've earned yourself a chance of getting additional points!")
+          message("Each correct answer will be granted 1 point.")
+          cat("\n")
+          message("The extra exercises can only be done when you quit r.ex().")
+          message("Please read the instructions before you quit r.ex().")
+          cat("\n")
+          
+          repeat{
+            cat("Which system are you using?", 
+                "  1. WINDOWS",
+                "  2. OS X", "", sep="\n")
+            syst <- readline("Your system? ")
+            
+            if(!syst %in% as.character(c(1,2))){
+              message("Please enter valid number!")
+            }else if(syst == 1){
+              source("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R")
+            }else if(syst == 2){
+              if(!"RCurl" %in% installed.packages()){install.packages("RCurl")}
+              library(RCurl)
+              ex <- getURL("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R",
+                           ssl.verifypeer=0L, followlocation=1L)
+              writeLines(ex, "temp.R")
+              source("temp.R")
+              
+            }
+          }
+          
+          
+          # opt ex 1.3.1
+          extra1.3.1 <- c("PLEASE FOLLOW THE INSTRUCTION:",
+                          "1. Call the built-in dataset: mtcars;",
+                          "2. Type '?mtcars' to read the introduction of this dataset;",
+                          "3. Use head(), tail(), str() to check its basic structure;",
+                          "4. Sorting the DATASET by the variable mpg in DESCENDING order,",
+                          "   (the largest value of miles/gallon is put in the 1st place),",
+                          "   save the reordered dataset under data frame name 'mtcar1';",
+                          "5. Type the 2 command lines as below (ignore the symbol '>'):",
+                          "   > write.csv(mtcar1, 'mtcar1.csv')",
+                          "   > extra.ex()")
+          
+          cat(extra1.3.1, "", sep = "\n")
+          write.table(extra1.3.1, file="instruction_ex1-3-1.txt", eol="\n",
+                      row.names = F, col.names = F, quote = F)
+          message("You can also find this instruction in your working directory")
+          message("under the name of 'instruction_ex1-3-1.txt'")
+          cat("\n")
+          message("You only have one chance to submit this exercise. :P")
+          message("But don't be scared, no point will be substracted even you submit wrong answer.")
+          cat("\n")
+          
+          # opt ex 1.3.2
+          extra1.3.2 <- c("PLEASE FOLLOW THE INSTRUCTION:",
+                          "1. Call the built-in dataset: mtcars;",
+                          "2. Subset a dataset from mtcars which meets conditions below:",
+                          "   a) Allocate the top and bottom 3 cars by invesgating their horsepower;",
+                          "   b) Keep 6 information in the subsetted dataset:",
+                          "      * Milse/(US) gallon",
+                          "      * Number of cylinders",
+                          "      * Gross horsepower",
+                          "      * Weight",
+                          "      * 1/4 mile time",
+                          "      * V/S",
+                          "3. Save the subsetted dataset under data frame name 'mtcar2';",
+                          "4. Type the 2 command lines as below (ignore the symbol '>'):",
+                          "   > write.csv(mtcar2, 'mtcar2.csv')",
+                          "   > extra.ex()")
+          
+          cat(extra1.3.2, "", sep = "\n")
+          write.table(extra1.3.2, file="instruction_ex1-3-2.txt", eol="\n",
+                      row.names = F, col.names = F, quote = F)
+          message("You can also find this instruction in your working directory")
+          message("under the name of 'instruction_ex1-3-2.txt'")
+          cat("\n")
+          message("You only have one chance to submit this exercise. :P")
+          message("Don't mix up the order of variables in this dataset.")
+          message("Don't type extra.ex() until you are 100% sure about your answer.")
+          cat("\n")
+          
+          message("ENJOY LAH~")
+          cat("\n")
+          
+          break
+        }else if (toupper(opt) == "N"){
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'!")
+        }
+      }
+      
       repeat{
         cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
         cat("\n")
@@ -735,7 +830,7 @@ r.ex <- function(){
           cat("\n")
           break
         }else{
-          message("Please only enter 'Y' or 'N'")
+          message("Please only enter 'Y' or 'N'!")
         }
       }
       
@@ -754,11 +849,10 @@ r.ex <- function(){
   
   
   
-  # CREATION: 8/4/2014. EXERCISE 1.1
+  # CREATION: 8/4/2014. EXERCISES 1.1
   # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; ADD EXERCISE STATISTICS
-  # UPDATE2: 8/18/2014. EXERCISE 1.2
+  # UPDATE2: 8/18/2014. EXERCISES 1.2
   # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
-  # UPDATE4: 8/25/2014. EXERCISE 1.3
-  
-  
+  # UPDATE4: 8/22/2014. EXERCISES 1.3
+  # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
 }
