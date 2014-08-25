@@ -747,6 +747,7 @@ r.ex <- function(){
               message("Please enter valid number!")
             }else if(syst == 1){
               source("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R")
+              break
             }else if(syst == 2){
               if(!"RCurl" %in% installed.packages()){install.packages("RCurl")}
               library(RCurl)
@@ -754,7 +755,7 @@ r.ex <- function(){
                            ssl.verifypeer=0L, followlocation=1L)
               writeLines(ex, "temp.R")
               source("temp.R")
-              
+              break
             }
           }
           
