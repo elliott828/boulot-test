@@ -727,7 +727,7 @@ r.ex <- function(){
       
       # optional exercises 1.3
       repeat{
-        opt <- readline("Do you want to do 2 more optional exercises (Y/N)?")
+        opt <- readline("Do you want to do 2 more optional exercises (Y/N)? ")
         cat("\n")
         if (toupper(opt) == "Y"){
           message("Da~da~. You've earned yourself a chance of getting additional points!")
@@ -741,7 +741,7 @@ r.ex <- function(){
             cat("Which system are you using?", 
                 "  1. WINDOWS",
                 "  2. OS X", "", sep="\n")
-            syst <- readline("Your system? ")
+            syst <- as.numeric(readline("Your system? "))
             
             if(!syst %in% as.character(c(1,2))){
               message("Please enter valid number!")
@@ -855,4 +855,5 @@ r.ex <- function(){
   # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
   # UPDATE4: 8/22/2014. EXERCISES 1.3
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
+  
 }
