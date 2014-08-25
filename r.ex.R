@@ -538,7 +538,7 @@ r.ex <- function(){
           message("Correct! Let's move to the next question.")
           cat("\n")
           break
-        }else if (ans %in% c("1", "3", "4")){
+        }else if (ans %in% c("2", "3", "4")){
           q1 <- q1 + 1
           
           if(q1>3){
@@ -559,10 +559,185 @@ r.ex <- function(){
         }
       }
       
+      # Question 2
+      q2 <- 1
+      repeat{
+        cat("Q2. Which statements below is FALSE:",
+            "  1. Matrix can only store one data type;",
+            "  2. Data frame is often used for complicated data analysis because of",
+            "     its capability of storing multiple data type;",
+            "  3. Functions like colSums(), rowMeans(), etc. can only be used on matrix;",
+            "  4. Functions data.frame() and as.data.frame() have same effect when we want",
+            "     to coerce a matrix to data frame without considering column names.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "3"){
+          message("Hoorey~ Corret answer!")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "2", "4")){
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The only right answer is 3.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
       
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Run the following command and create a matrix 'matr':",
+            '> matr <- matrix(11:22, byrow = T, 3, 4)',
+            "",
+            "Which command will get an logical value 'TRUE'?",
+            "  1. > matr[5] == 15",
+            "  2. > matr[2,3] == 17",
+            "  3. > matr[1:3] == c(11,12,13)",
+            "  4. > matr[,2] - matr[,1] == rep(3,3)",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "2"){
+          message("Great! You still have 2 questions to answer!")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "3", "4")){
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("You have run out of 3 trials...")
+            message("The correct answer is 2.")
+            message("Pay attention on the direction of data filling!")
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
       
+      # Question 4
+      q4 <- 1
+      repeat{
+        cat("Q4. Which expression below is FALSE concerning a dataset 'df' with more than 10",
+            "    observations and more than 5 numeric variables?"
+            "  1. head(df) returns the first 5 rows of 'df';",
+            "  2. str(df) returns the structure of 'df';",
+            "  3. tail(df) == df[(nrow(df)-5):nrow(df),];",
+            "  4. summary(df) returns summraries (min, max, mean, median, etc.) for each variable.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "1"){
+          message("One question to go! Ganbade!")
+          cat("\n")
+          break
+        }else if(ans %in% c("2", "3", "4")){
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 1st option.")
+            message("head() returns the first 6 rows of a dataset by default.")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
       
+      # Question 5
+      q5 <- 1
+      repeat{
+        cat("Q5. A data frame is created:",
+            '> a <- c(1,5,2,3)',
+            "> b <- c(T,F,T,F)",
+            "> c <- LETTERS[4:7]",
+            "> df <- data.frame(a,b,c)",
+            "",
+            "Which combination below is TRUE?",
+            "1. > is.vector(df$a) & is.matrix(df)"
+            "2. > is.character(df$c) & is.logical(df$b)"
+            "3. > (is.data.frame(df) | is.character(df$c)) & sum(df$a)==11"
+            "4. > is.numeric(as.matrix(df)[,1])"
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (no. of line): ")
+        if (ans == "3"){
+          message("Congratulations! You have finished the exercise 1.2!")
+          message("See you in next set of exercises~")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "2", "4")){
+          q5 <- q5 + 1
+          
+          if (q5>3){
+            message("You have tried 3 times...")
+            message("The correct answer is 3.")
+            message("  - df$c is a factor, instead of a character vector;")
+            message("  - after being turned to matrix, df$a becomes a character vector.")
+            message("See you around~")
+            cat("\n")
+            break
+          }else{
+            message("Try~~~~again~~~~~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
       
+      cat("Exercise 1.3 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+      }
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'")
+        }
+      }
       
     }else{
       message("Not developed yet... To be released after next session... :P")
@@ -583,5 +758,7 @@ r.ex <- function(){
   # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; ADD EXERCISE STATISTICS
   # UPDATE2: 8/18/2014. EXERCISE 1.2
   # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
+  # UPDATE4: 8/25/2014. EXERCISE 1.3
+  
   
 }
