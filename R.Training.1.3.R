@@ -35,6 +35,8 @@ matrix(data = 1:8, nrow = 2, ncol = 4, byrow = T)
 matrix(data = 1:8, nrow = 2, ncol = 4, byrow = T, 
        dimnames = list(c("row1","row2"),
                        c("col1","col2","col3","col4")))
+# list() can store vectors of different length, will be introduced in next session.                       
+
 # compare the function above with the one below:
 matrix(1:8, 2, 4, T, 
        list(c("row1","row2"),
