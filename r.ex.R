@@ -16,7 +16,8 @@ r.ex <- function(){
   message("Just practice and make sure you fully understand the content of training.")
   message("You can press 'Esc' anywhere when you want to exit.")
   cat("\n")
-  
+  na <- readline("Press 'ENTER' to continue...")
+  cat("\n")
   message("You can try 3 times for each exercise.") 
   message("If you failed all, correct answer will be printed.")
   message("Don't be shy, just try! :P")
@@ -687,7 +688,7 @@ r.ex <- function(){
             sep = "\n")
         ans <- readline("Your answer (no. of line): ")
         if (ans == "3"){
-          message("Congratulations! You have finished the exercise 1.2!")
+          message("Congratulations! You have finished the exercise 1.3!")
           message("See you in next set of exercises~")
           cat("\n")
           break
@@ -723,6 +724,7 @@ r.ex <- function(){
       
       if(q1+q2+q3+q4+q5-5 == 0){
         message("You made no mistake at all in this set of exercise! Congratulations!")
+        cat("\n")
       }
       
       # optional exercises 1.3
@@ -863,4 +865,5 @@ r.ex <- function(){
   # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
   # UPDATE4: 8/22/2014. EXERCISES 1.3
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
+  
 }
