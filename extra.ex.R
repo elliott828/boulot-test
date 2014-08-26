@@ -73,8 +73,12 @@ extra.ex <- function(){
             ans131 <- ans131 + 1
             if (ans131 == 1){
               time <- gsub(":",".",gsub(" ",".",Sys.time()))
-              write.csv(ans131, paste("M://Drop Folders//Mingmin Z//R extra//",
-                                      paste(name,"131.ok",time,"csv",sep="."),sep=""))
+              sendmail("zhu.mingmin@thebluehive.com", 
+                       subject = paste(name,"ex131.CORRECT",time,"csv",sep="."), 
+                       message = "extra131 finished!",
+                       password = "rmail")
+              # write.csv(ans131, paste("M://Drop Folders//Mingmin Z//R extra//",
+                                      # paste(name,"131.ok",time,"csv",sep="."),sep=""))
             }
             
             cat("\n")
@@ -114,8 +118,12 @@ extra.ex <- function(){
             ans132 <- ans132 + 1
             if (ans132 == 1){
               time <- gsub(":",".",gsub(" ",".",Sys.time()))
-              write.csv(ans131, paste("M://Drop Folders//Mingmin Z//R extra//",
-                                      paste(name,"132.ok",time,"csv",sep="."),sep=""))
+              sendmail("zhu.mingmin@thebluehive.com", 
+                       subject = paste(name,"ex131.CORRECT",time,"csv",sep="."), 
+                       message = "extra132 finished!",
+                       password = "rmail")
+              #write.csv(ans131, paste("M://Drop Folders//Mingmin Z//R extra//",
+                                      #paste(name,"132.ok",time,"csv",sep="."),sep=""))
             }
             cat("\n")
             quest1()
@@ -139,6 +147,8 @@ extra.ex <- function(){
   
   subm()
   
-  
   # CREATION: 8/25/2014. Create 2 extra exercises for session 1.3
+  # UPDATE: 8/26/2014. Make it feasible for sending ex. result by email (instead of saving it in shared drive.).
+  
+  
 }
