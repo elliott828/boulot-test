@@ -19,6 +19,8 @@ Materials for all work related tasks
   - AutoReg() - interactive regression program
 * r.ex.R
   - r.ex() - interactive training exercises corresponding to relative training sessions
-* R.Training.1.1.R
-  - training session materials
+* extra.ex.R
+  - extra.ex() - optional training exercises - coding practice
+* R.Training.1.1.R ~ 1.4.R
+  - training session materials - basic operations
 
