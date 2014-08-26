@@ -761,7 +761,8 @@ r.ex <- function(){
             }
           }
           
-          na <- readline("Press 'ENTER' for continue...")
+          cat("\n")
+          na <- readline("Press 'ENTER' to continue...")
           cat("\n")
           
           # opt ex 1.3.1
