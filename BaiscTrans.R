@@ -1,14 +1,15 @@
-##############################################################################
-## A collection of 6 self-defined functions                                 ##
-## 1. co() - transform variable with carry-over rate                        ##
-## 2. pc() - transform variable with power curve rate                       ##
-## 3. sc() - transform variable with s curve rates                          ##
-## 4. meth.c.p() - find out best parameters for transforming with co()+pc() ##
-## 5. meth.c.s() - find out best parameters for transforming with co()+sc() ##
-## 6. cp.vs.cs() - compare the 2 methodology (4 & 5) and offer the best     ##
-## 7. lm.lag() - produce lagged data in both backward & forward direction   ##
-## 8. mdl.smry() - combination of basic model summary, MAPE & dwtest        ##
-##############################################################################
+########################################################################################
+## A collection of 6 self-defined functions                                           ##
+## 1. co() - transform variable with carry-over rate                                  ##
+## 2. pc() - transform variable with power curve rate                                 ##
+## 3. sc() - transform variable with s curve rates                                    ##
+## 4. meth.c.p() - find out best parameters for transforming with co()+pc()           ##
+## 5. meth.c.s() - find out best parameters for transforming with co()+sc()           ##
+## 6. cp.vs.cs() - compare the 2 methodology (4 & 5) and offer the best               ##
+## 7. lm.lag() - produce lagged data in both backward & forward direction             ##
+## 8. mdl.smry() - combination of basic model summary, MAPE & dwtest                  ##
+## 9. ContM() - read variables and their transformation variables and rebuild a model ##
+########################################################################################
 
 ##################################################
 # define carry-over rate transformation function #
@@ -241,5 +242,94 @@ mdl.smry <- function(model, data, var){
   names(consolidation) <- c("SUMMARY", "MAPE", "DWTEST")
   return(consolidation)
   
-  # 8/7/2014: Creation - Creation of mdl.smry(), listing basic summary, MAPE and dwtest
 }
+
+
+#=============================================#
+# Continue modeling based on a built up model #
+#=============================================#
+ContM <- function(resp, data){
+  
+  if(file.exists("Modif.R")){
+    source("Modif.R")
+  }else{
+    source("https://raw.githubusercontent.com/elliott828/boulot-test/master/Modif.R")
+  }
+  
+  fit <- NULL
+  
+  # read the parameter file which realizes the transformation of variables
+  
+  # the file should have 6 basic columns
+  # - variable: variable names
+  # - type: transformation type (not developped yet)
+  # - co.rate: carry-over rate
+  # - pc.rate: power curve rate
+  # - sc.rate1: s curve rate 1
+  # - sc.rate2: s curve rate 2
+  # - status: is the variable still alive in the model
+  
+  repeat{
+    cat("\n")
+    message("Be aware that the file should be of format '.csv'!")
+    cat("\n")
+    csv <- readline("Please enter the name of transformation parameter file: ")
+    endstr <- substr(csv, nchar(csv)-2, nchar(csv))
+    
+    if (endstr != "csv"){
+      cat("\n")
+      message("A '.csv' file is expected!")
+      cat("\n")
+    }else if(file.exists(csv)){
+      prmt <- read.csv(csv)
+      break
+    }else{
+      cat("\n")
+      message(paste("The file '", csv, "' does not exist!"))
+      cat("\n")
+    }
+  }
+  
+  # read the variable name and variable status
+  loop.len <- nrow(prmt)
+  for (i in 1:loop.len){
+    if(!prmt$variable[i] %in% names(data)){
+      
+      # if the variable cannot match then stop the function
+      stop(paste("The variable ",prmt$variable[i]," does not exist in this dataset!"))
+      cat("\n")
+    }else{
+      
+      # else check the status of variable
+      if (prmt$status[i] == "dead"){
+        
+        # if status == "dead" go to next loop
+        next
+      }else{
+        
+        # else call Modif() to transform the variable
+        p1 <- prmt$co.rate[i]
+        p2 <- prmt$pc.rate[i]
+        p3 <- prmt$sc.rate1[i]
+        p4 <- prmt$sc.rate2[i]
+        new.df <- Modif(prmt$variable[i], data, 
+                        co.r = p1, pc.r = p2, sc.1 = p3, sc.2 = p4)
+        
+        # if i = 1, build a new model; if i > 1, update previous model
+        if (i == 1){
+          fit <- lm(as.formula(sprintf('%s ~ %s', resp, prmt$variable[i])), data = new.df, na.action = na.exclude)
+        }else{
+          fit <- update(fit, as.formula(sprintf('~. + %s', prmt$variable[i])), data = new.df)
+        }
+      }
+      
+    }
+  }
+  
+  # return a list of both model result and updated data frame
+  return(list(fit, new.df))
+  
+}
+
+# 8/7/2014: Creation - mdl.smry(), listing basic summary, MAPE and dwtest
+# 8/29/2014: Creation - ContM(), continue modeling based on the list of variables and their transformation parameters
