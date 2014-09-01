@@ -5,13 +5,13 @@ Modif <- function(pred, data, co.r = NaN, pc.r = NaN, sc.1 = NaN, sc.2 = NaN){
   
   # source('BasicTrans.R')
   df <- data
-  pred <- as.character(pred) # ensure input like factor to be coerced to character
   
   # check if the variable exists in the data frame
   check <- pred %in% names(df)
   if (check == FALSE){
     stop(paste("The variable '", pred, "' does not exist in the database!", sep=""))
   }
+  pred <- as.character(pred) # ensure input like factor to be coerced to character
   
   if(is.na(co.r)){
     # if no parameter for co rate, then no transformation happens
