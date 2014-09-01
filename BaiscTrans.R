@@ -257,6 +257,7 @@ ContM <- function(resp, data){
   }
   
   fit <- NULL
+  df <- data
   
   # read the parameter file which realizes the transformation of variables
   
@@ -293,43 +294,46 @@ ContM <- function(resp, data){
   # read the variable name and variable status
   loop.len <- nrow(prmt)
   for (i in 1:loop.len){
-    if(!prmt$variable[i] %in% names(data)){
+    if(!prmt[i,2] %in% names(data)){
       
       # if the variable cannot match then stop the function
-      stop(paste("The variable ",prmt$variable[i]," does not exist in this dataset!"))
+      stop(paste("The variable ",prmt[i,2]," does not exist in this dataset!"))
       cat("\n")
     }else{
       
       # else check the status of variable
-      if (prmt$status[i] == "dead"){
+      if (prmt[i,7] == "dead"){
         
         # if status == "dead" go to next loop
         next
       }else{
         
         # else call Modif() to transform the variable
-        p1 <- prmt$co.rate[i]
-        p2 <- prmt$pc.rate[i]
-        p3 <- prmt$sc.rate1[i]
-        p4 <- prmt$sc.rate2[i]
-        new.df <- Modif(prmt$variable[i], data, 
-                        co.r = p1, pc.r = p2, sc.1 = p3, sc.2 = p4)
+        pred <- as.character(prmt[i,2]) # predictor
+        co.r <- prmt[i,3] # co.rate
+        pc.r <- prmt[i,4] # pc.rate
+        sc.1 <- prmt[i,5] # sc.rate1
+        sc.2 <- prmt[i,6] # sc.rate2
         
+        df <- Modif(pred, df, co.r, pc.r, sc.1, sc.2)
+                
         # if i = 1, build a new model; if i > 1, update previous model
         if (i == 1){
-          fit <- lm(as.formula(sprintf('%s ~ %s', resp, prmt$variable[i])), data = new.df, na.action = na.exclude)
+          fit <- lm(as.formula(sprintf('%s ~ %s', resp, pred)),
+                    data = df, na.action = na.exclude)
         }else{
-          fit <- update(fit, as.formula(sprintf('~. + %s', prmt$variable[i])), data = new.df)
+          fit <- update(fit, as.formula(sprintf('~. + %s', pred)), 
+                        data = df)
         }
       }
-      
     }
   }
   
   # return a list of both model result and updated data frame
-  return(list(fit, new.df))
+  return(list(fit, df))
   
 }
 
 # 8/7/2014: Creation - mdl.smry(), listing basic summary, MAPE and dwtest
 # 8/29/2014: Creation - ContM(), continue modeling based on the list of variables and their transformation parameters
+# 9/1/2014: Update - ContM(), bug fixed on reading predictor to be transformed
