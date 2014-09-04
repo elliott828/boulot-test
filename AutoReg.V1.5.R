@@ -442,6 +442,7 @@ AutoReg <- function(data){
           if (prmt.exp == "Y"){
             write.csv(prmt, paste(getwd(), "/prmt.csv", sep = ""))
             message('Variable parameters history is exported to "prmt.csv" under default working directory')
+            cat(paste(rep("-+-",20),collapse=""))
             
             resid <- summary(fit)$residuals
             subset.resp <- as.numeric(names(resid))
@@ -452,12 +453,19 @@ AutoReg <- function(data){
             colnames(mape.elmt) <- c("Residual", "Actual", "APE")
             write.csv(mape.elmt, paste(getwd(), "/mape.element.csv", sep = ""))
             message('The elements of MAPE "mape.element.csv" is exported.')
+            cat(paste(rep("-+-",20),collapse=""))
             
             a <- mdl.smry(fit, ndf, resp)
             write.csv(coef(a[[1]]),"coef.mdl.csv")
-            cat("\n")
             message("Coefficients of the model is exported in file 'coef.mdl.csv'!")
-            cat("\n")
+            cat(paste(rep("-+-",20),collapse=""))
+            
+            if(nrow(coef(a[[1]]))>1){
+              write.csv(vif(fit), "vif.csv")
+              message("VIF of coefficients is exported in file 'vif.csv'!")
+              cat(paste(rep("-+-",20),collapse=""))
+            }
+            
             
             break
           }else if (prmt.exp == "N"){
@@ -549,4 +557,5 @@ AutoReg <- function(data){
 
 
 # UPDATE: 9/1/2014, New functionality: could read old parameter (for transformation) file and
-          make modification based on this file according to new test and adjustment on the model.
+#         make modification based on this file according to new test and adjustment on the model.
+# UPDATE: 9/4/2014, New files can be exported after a model built up: MAPE, coefficients, VIF
