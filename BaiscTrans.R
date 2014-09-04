@@ -329,12 +329,16 @@ ContM <- function(resp, data){
     }
   }
   
+  message("Please verify if the summary of the model is aligned with your expectation: ")
+  print(summary(fit))
   # return a list of both model result and updated data frame
   return(list(fit, df, prmt))
   
 }
 
+
 # 8/7/2014: Creation - mdl.smry(), listing basic summary, MAPE and dwtest
 # 8/29/2014: Creation - ContM(), continue modeling based on the list of variables and their transformation parameters
 # 9/1/2014: Update - ContM(), bug fixed on reading predictor to be transformed - all data will be coerced to char concerning variable names
 # 9/1/2014: Update - ContM(), full dataset of prmt is a part of new list returned at the end of this program
+# 9/4/2014: Update - ContM(), model summary can be printed out after a prmt.csv is read
