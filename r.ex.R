@@ -22,6 +22,31 @@ r.ex <- function(){
   message("If you failed all, correct answer will be printed.")
   message("Don't be shy, just try! :P")
   
+  # when users want to do extra exercises, check and adapt corresponding sourcing codes.
+  call.extra <- function(){
+    repeat{
+      cat("Which system are you using?", 
+          "  1. WINDOWS",
+          "  2. OS X", "", sep="\n")
+      syst <- as.numeric(readline("Your system? "))
+      cat("\n")
+      if(!syst %in% as.character(c(1,2))){
+        message("Please enter valid number!")
+      }else if(syst == 1){
+        source("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R")
+        break
+      }else if(syst == 2){
+        if(!"RCurl" %in% installed.packages()){install.packages("RCurl")}
+        library(RCurl)
+        ex <- getURL("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R",
+                     ssl.verifypeer=0L, followlocation=1L)
+        writeLines(ex, "temp.R")
+        source("temp.R")
+        break
+      }
+    }
+  }
+  
   no.ex <- function(){
     cat("\n")
     repeat{
@@ -739,27 +764,7 @@ r.ex <- function(){
           message("Please read the instructions before you quit r.ex().")
           cat("\n")
           
-          repeat{
-            cat("Which system are you using?", 
-                "  1. WINDOWS",
-                "  2. OS X", "", sep="\n")
-            syst <- as.numeric(readline("Your system? "))
-            cat("\n")
-            if(!syst %in% as.character(c(1,2))){
-              message("Please enter valid number!")
-            }else if(syst == 1){
-              source("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R")
-              break
-            }else if(syst == 2){
-              if(!"RCurl" %in% installed.packages()){install.packages("RCurl")}
-              library(RCurl)
-              ex <- getURL("https://raw.githubusercontent.com/elliott828/boulot-test/master/extra.ex.R",
-                           ssl.verifypeer=0L, followlocation=1L)
-              writeLines(ex, "temp.R")
-              source("temp.R")
-              break
-            }
-          }
+          call.extra()
           
           cat("\n")
           na <- readline("Press 'ENTER' to continue...")
@@ -845,6 +850,198 @@ r.ex <- function(){
         }
       }
       
+    }else if (no.set == 1.4){
+      
+      #---------------#
+      # Exercises 1.4 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 1.4 - List & Missing Values"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 4 exercises below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat("Q1. Which statement about 'list' is CORRECT:",
+            "  1. A list can only store 1 data type;",
+            "  2. Elements of list should be of same length;",
+            "  3. Elements of list can be subsetted by both [[ ]] and [] operators;",
+            "  4. A list cannot store another list.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        # ans.bis <- as.numeric(ans)
+        if (ans == "3"){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "2", "4")){
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer is 3!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 2
+      q2 <- 1
+      repeat{
+        cat("Q2. Create a list by code below:",
+            "  > Intro <- 'The most popular soccer stars!'",
+            "  > SoccerStars <- matrix(c('C.Ronaldo','Messi','Roben','Hazard',",
+            "                             28, 26, 30, 23, 15, 12, 8, 6),",
+            "                           nrow = 4, ncol = 3,",
+            "                           dimnames = list(1:4,",
+            "                                           c('Names','Age','Goals')))",
+            "  > Nationality <- list('They are from:',",
+            "                         c('Portugal','Argentina','Netherland','Belgium'))",
+            "  > Soccer <- list(INTRO=Intro, STARS=SoccerStars, NATION=Nationality)",
+            "",
+            "  Which command can get the age of Roben?",
+            "  1. > Soccer[2][3,2]",
+            "  2. > Soccer[2]$Age[3]",
+            "  3. > Soccer$STARS[3,2]",
+            "  4. > Soccer[['STARS']][3,][,2]",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "3"){
+          message("Hoorey~ Corret answer!")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "2", "4")){
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The only right answer is 3.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Which command below generates error message?",
+            '  > matr <- matrix(rep(LETTERS[1:6],2), byrow = T, 3, 4)',
+            '  > vect <- vector("a", b, 1, T)',
+            '  > fact <- factor(c(LETTERS[3:1],T,1),ordered = T)',
+            '  > list <- list("This is a test", rep(c("Rock","Roll"),3))',
+            '',
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "2"){
+          message("Great! One question to go!")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "3", "4")){
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("You have run out of 3 trials...")
+            message("The correct answer is 2.")
+            message("The 2nd element is not a valid value!")
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 4
+      q4 <- 1
+      repeat{
+        cat("Q4. There is a vector with missing value:",
+            "  > Ohlala <- sample(c(rnorm(1000),rep(NA,1000)),20)",
+            "",
+            "  Which command CAN replace the NA by the average value of valid numbers?",
+            "  1. > Ohlala[is.na(Ohlala)] <- mean(Ohlala, na.rm = T)",
+            "  2. > Ohlala[!complete.cases(Ohlala)] <- mean(Ohlala)",
+            "  3. > Ohlala[Ohlala == 'NA'] <- mean(Ohlala, na.rm = T)",
+            "  4. > Ohlala[Ohlala == NA] <- mean(Ohlala)",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "1"){
+          message("Excellent!")
+          cat("\n")
+          break
+        }else if(ans %in% c("2", "3", "4")){
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 1st option.")
+            message("NA cannot be measured by logical operators!")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      cat("Exercise 1.4 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4-4 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+        cat("\n")
+      }
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'!")
+        }
+      }
+      
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
@@ -866,5 +1063,5 @@ r.ex <- function(){
   # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
   # UPDATE4: 8/22/2014. EXERCISES 1.3
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
-  
+  # UPDATE6: 10/22/2014. EXERCISES 1.4
 }
