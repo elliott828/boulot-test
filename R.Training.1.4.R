@@ -104,3 +104,19 @@ x
 # NaN: Not a number
 Inf - Inf
 0/0
+
+
+#---------------------------------------------------------------------
+# Session 1.4 Review
+# - List
+#   * Definition
+#   * How to create a list: list()
+#   * How to name a list
+#   * List subsetting
+# - Missing Value
+#   * NA
+#   * Identify NA
+#   * NaN
+#---------------------------------------------------------------------
+
+# finished on Wed. 10/22/2014
