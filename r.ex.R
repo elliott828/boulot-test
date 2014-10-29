@@ -55,6 +55,7 @@ r.ex <- function(){
           " 1.2 - Vector & Factor",
           " 1.3 - Matrix, Data Frame & Subsetting",
           " 1.4 - List & Missing Values",
+          " 2.1 - Control Flow & Self-defined Function",
           " ",
           " 0. Exit this exercise program",
           " ", sep = "\n")
@@ -524,7 +525,7 @@ r.ex <- function(){
           message("Please only enter 'Y' or 'N'")
         }
       }
-       
+      
     }else if (no.set == 1.3){
       
       #---------------#
@@ -1042,6 +1043,255 @@ r.ex <- function(){
         }
       }
       
+    }else if (no.set == 2.1){
+      
+      #---------------#
+      # Exercises 2.1 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 2.1 - Control Flow & Self-defined Function"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 5 questions below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat('Q1. which statement below is the functionality of "repeat" loops?',
+            " 1. testing a condition;",
+            " 2. execute a loop within a fixed number of times;",
+            " 3. execute a loop while a condition is true;",
+            " 4. execute an infinite loop until a 'break' clause shows up.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        # ans.bis <- as.numeric(ans)
+        if (ans == "4"){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "2")){
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer below:")
+            message("Repeat loops execute an infinite loop!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+          
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 2
+      q2 <- 1
+      repeat{
+        cat("Q2. Which loop below may not be able to execute an infinite loop theoretically?",
+            "    PS: An infinite loop may not be expected and may cause problems.",
+            " 1. while",
+            " 2. for",
+            " 3. repeat",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "2"){
+          message("Great! ")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "3")){
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("You have run out of 3 trials...")
+            message("The correct answer is 2.")
+            message(' - "while" loops may go infinitely when the condition is always true;')
+            message(' - "for" loops have a definition which says execute a loop a fixed number of times;')
+            message(' - "repeat" loops have a definition which says execute an infinite loop.')
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+          
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 3 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Q3. Which expression below is TRUE?",
+            ' 1. One "if" clause can only be followed by one "else" or "else if";',
+            " 2. Different loops cannot be nested;",
+            ' 3. "break" is the only way to stop a "repeat" loop;',
+            " 4. R will always give warnings or messages when issues occur.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "3"){
+          message("Oh! Yeah! You still have 2 questions to answer!")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "2", "4")){
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 3rd option.")
+            message("Some situations which R doesn't think are errors may cause problems to us.")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+          
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 4
+      q4 <- 1
+      repeat{
+        cat("Q4. A self-defined function is created:",
+            "> above <- function(x, n = 10) {",
+            "+             use <- x > n",
+            "+             x[use]",
+            "+ }",
+            "",
+            "Which of the following is right?",
+            " 1. n = 10 means that n must equal to 10;",
+            " 2. There are three parameters in this function;",
+            " 3. The function's name is called 'above';",
+            " 4. If length(x) = 10, then the length of output is also 10.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "3"){
+          message("Hoorey~ Corret answer! Only one question to go! Ganbade!")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "2", "4")){
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The only right answer is 3.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+          
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }   
+      
+      # Question 5
+      q5 <- 1
+      repeat{
+        cat("Q5. Check the commands below:",
+            "> achieve <- function(mat, eng) { # input scores for Maths and English test",
+            "+                    if(mat + eng > 185) {",
+            '+                         ach <- "Excellent"',
+            "+                    } else if(mat + eng > 175) {",
+            '+                         ach <- "Great"',
+            "+                    } else if(mat + eng > 155) {",
+            '+                         ach <- "Good"',
+            "+                    } else if((mat > 65) & (eng > 65)) {",
+            '+                         ach <- "Medium"',
+            "+                    } else if((mat < 60) | (eng < 60)) {",
+            '+                         ach <- "Fail"',
+            "+                    } else {",
+            '+                         ach <- "Work Harder"',
+            "+                    }",
+            "+                    ach",
+            "+            }",
+            "",
+            "Which of the following is right?",
+            ' 1. achieve(80, 80) outputs "Medium"',
+            " 2. This function can output all the students' achievements at a time",
+            ' 3. achieve(95, 50) still outputs "Fail" regardless of high score 95',
+            ' 4. achieve(95, 90) outputs "Excellent"',
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "3"){
+          message("Congratulations! You have finished the exercise 1.5!")
+          message("See you in next set of exercises~")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "2", "4")){
+          q5 <- q5 + 1
+          
+          if (q5>3){
+            message("You have tried 3 times...")
+            message("The correct option is 3")
+            message("You can enter 'r.ex()' again to do this exercise again.")
+            message("See you around~")
+            cat("\n")
+            break
+          }else{
+            message("Try~~~~again~~~~~")
+            cat("\n")
+          }
+          
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      cat("Exercise 2.1 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+        cat("\n")
+      } 
+      
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'!")
+        }
+      }
+      
+      
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
@@ -1064,4 +1314,5 @@ r.ex <- function(){
   # UPDATE4: 8/22/2014. EXERCISES 1.3
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
   # UPDATE6: 10/22/2014. EXERCISES 1.4
+  # UPDATE7: 10/29/2014. EXERCISES 2.1 BY KATHERINE.HOU
 }
