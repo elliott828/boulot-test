@@ -178,6 +178,7 @@ for (i in 1:20){
 # print last warning message in a "pleasing" form
 warning("Oh! Don't Laugh at Me!")
 warnings()
+# assign("last.warning", NULL, envir = baseenv())
 
 # warnings(...)
 # concatenate with the last warning message, argument to be passed to cat()
