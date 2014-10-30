@@ -56,13 +56,14 @@ r.ex <- function(){
           " 1.3 - Matrix, Data Frame & Subsetting",
           " 1.4 - List & Missing Values",
           " 2.1 - Control Flow & Self-defined Function",
+          " 2.2 - Input & Output"
           " ",
           " 0. Exit this exercise program",
           " ", sep = "\n")
       no.set <- readline("Please enter the session number: ")
       # check1 <- regular expression
       # check2 <- no.set %in% c(seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))
-      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))){
+      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.3,0.1),seq(3.1,3.5,0.1))){
         break
       }else{
         message("Just enter number of exercise set listed above please.")
@@ -1292,6 +1293,248 @@ r.ex <- function(){
       }
       
       
+    }else if (no.set == 2.2){
+      
+      #---------------#
+      # Exercises 2.2 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 2.2 - Input & Output"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 5 exercises below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat("Q1. Suppose the working directory is folder 'R-training' in D Drive,",
+            "    which command/operation CANNOT source 'r.ex.R' file in this folder?",
+            "  1. R / RStudio Navigation Bar => Open File", 
+            "     => Allocate 'r.ex.R' file in folder 'R-training'",
+            "     => Select the 'r.ex.R' and click the button 'Open'",
+            "",
+            "  2. > source('D:\\R-training\\r.ex.R')",
+            "",
+            "  3. > source('D:\\\\R-training\\\\r.ex.R')",
+            "",
+            "  4. > source('D:/R-training/r.ex.R')",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        # ans.bis <- as.numeric(ans)
+        if (ans == "2"){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "4")){
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer below:")
+            message("Single backslash is invalid for demonstrating the address in R!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 2
+      q2 <- 1
+      repeat{
+        cat("Q2. Which statements below is FALSE:",
+            "  1. write.csv() can only export a '.csv' file;",
+            "  2. read.xlsx() is a built-in function, we don't need to install packages;",
+            "  3. A '.csv' file can also be exported by write.table();",
+            "  4. read.table() cannot import a '.xlsx' file.",
+            "", sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "2"){
+          message("Hoorey~ Corret answer!")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "4")){
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The only right answer is 2. read.xlsx() is in package 'XLConnect'.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Suppose we have 3 files in '.csv', '.xls', '.xlsx' with exact same content,",
+            "(imagine they are exported by write.csv, write.xlsx with dataset 'mtcars')",
+            "which command below leads to a different data frame than others", 
+            "after import function runs?",
+            "",
+            "  1. > read.table('mtcars.csv')",
+            "  2. > read.csv('mtcars.csv')",
+            "  3. > read.xlsx('mtcars.xls',1)",
+            "  4. > read.xlsx('mtcars.xlsx',1)",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "1"){
+          message("Great! You still have 2 questions to answer!")
+          cat("\n")
+          break
+        }else if(ans %in% c("2", "3", "4")){
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("You have run out of 3 trials...")
+            message("Reading '.csv' by read.table() need to specify header=T and sep =','.")
+            message("Pay attention on the direction of data filling!")
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 4
+      q4 <- 1
+      repeat{
+        cat("Q4. Look at the paragraph below:",
+            "",
+            "    I figure life is a gift and I donnot intend on wasting it.",
+            "    You never know what hand you are going to get dealt next.",
+            "    You learn to take life as it comes at you.",
+            "",
+            "  Which option below can realize that?",
+            "",
+            "  1. > print('I figure life is a gift and I donnot intend on wasting it.')",
+            "     > print('You never know what hand you are going to get dealt next.')",
+            "     > print('You learn to take life as it comes at you.')",
+            "",
+            '  2. > message("I figure life is a gift and I donnot intend on wasting it.")',
+            '     > message("You never know what hand youre going to get dealt next.")',
+            '     > message("You learn to take life as it comes at you.")',
+            "",
+            "  3. > cat('I figure life is a gift and I donnot intend on wasting it.',",
+            "     +     'You never know what hand you are going to get dealt next.',",
+            "     +     'You learn to take life as it comes at you.', sep='\\n')",
+            "",
+            "  4. > first <- 'I figure life is a gift and I donnot intend on wasting it.'",
+            "     > second <- 'You never know what hand you are going to get dealt next.'",
+            "     > third <- 'You learn to take life as it comes at you.'",
+            "     > warnings(first, second, third, sep = '\\n')",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "3"){
+          message("One question to go! Ganbade!")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "2", "4")){
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 3rd option.")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 5
+      q5 <- 1
+      repeat{
+        cat("Q5. Which statement below is TRUE:",
+            "  1. library() downloads a uninstalled packages;",
+            "  2. warnings() prints last warning message(s);",
+            "  3. cat() prints a character vector;",
+            "  4. source() cannot read a R script from the Internet.",
+            "", sep = "\n")
+        ans <- readline("Your answer (no. of line): ")
+        if (ans == "2"){
+          message("Congratulations! You have finished the exercise 2.2!")
+          message("See you in next set of exercises~")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "3", "4")){
+          q5 <- q5 + 1
+          
+          if (q5>3){
+            message("You have tried 3 times...")
+            message("The correct answer is 2.")
+            message("See you around~")
+            cat("\n")
+            break
+          }else{
+            message("Try~~~~again~~~~~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      cat("Exercise 2.2 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+        cat("\n")
+      }
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'!")
+        }
+      }
+      
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
@@ -1315,4 +1558,5 @@ r.ex <- function(){
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
   # UPDATE6: 10/22/2014. EXERCISES 1.4
   # UPDATE7: 10/29/2014. EXERCISES 2.1 BY KATHERINE.HOU
+  # UPDATE8: 10/30/2014. EXERCISES 2.2
 }
