@@ -6,12 +6,17 @@
 #----------#
 # Sampling #
 #----------#
+
 # sample(x, size, replace = FALSE, prob = NULL)
-
 echantillon <- 1:10
-
 # random permutation
 sample(echantillon)
+
+# sample(number)
+# generates permutation of positive intergers which are 
+# smaller than or equal to the number
+sample(12.5)
+sample(1:12)
 
 # get 5 samples from "echantillon"
 sample(echantillon, 5)
