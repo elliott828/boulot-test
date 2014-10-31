@@ -56,7 +56,7 @@ r.ex <- function(){
           " 1.3 - Matrix, Data Frame & Subsetting",
           " 1.4 - List & Missing Values",
           " 2.1 - Control Flow & Self-defined Function",
-          " 2.2 - Input & Output"
+          " 2.2 - Input & Output",
           " ",
           " 0. Exit this exercise program",
           " ", sep = "\n")
