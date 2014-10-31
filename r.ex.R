@@ -1477,7 +1477,7 @@ r.ex <- function(){
       q5 <- 1
       repeat{
         cat("Q5. Which statement below is TRUE:",
-            "  1. library() downloads a uninstalled packages;",
+            "  1. library() downloads an uninstalled package;",
             "  2. warnings() prints last warning message(s);",
             "  3. cat() prints a character vector;",
             "  4. source() cannot read a R script from the Internet.",
