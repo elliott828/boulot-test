@@ -1,6 +1,6 @@
 #################################
 ## 2. Advanced Operation       ##
-## 2.3 Fundemental Statistics  ##
+## 2.3 Fundamental Statistics  ##
 #################################
 
 #----------#
