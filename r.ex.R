@@ -57,6 +57,7 @@ r.ex <- function(){
           " 1.4 - List & Missing Values",
           " 2.1 - Control Flow & Self-defined Function",
           " 2.2 - Input & Output",
+          " 2.3 - Fundamental Statistics",
           " ",
           " 0. Exit this exercise program",
           " ", sep = "\n")
@@ -1535,6 +1536,241 @@ r.ex <- function(){
         }
       }
       
+    }else if (no.set == 2.3){
+      
+      #---------------#
+      # Exercises 2.3 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 2.3 - Fundamental Statistics"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 5 exercises below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat("Q1. Which statement below is correct regarding 95% Confidence Interval?",
+            "  1. We expect 95% of the random samples (with same size)",
+            "     to contain the true population mean",
+            "  2. 95% confident that the sample mean in this interval",
+            "  3. 95% of the time the true mean will be in this interval",
+            "  4. We expect 95% of the intervals to contain the true sample mean",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        # ans.bis <- as.numeric(ans)
+        if (ans == "1"){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "4")){
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer below:")
+            message("The correct answer is option1!")
+            message("Confidence interval also contains sample mean!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 2
+      q2 <- 1
+      repeat{
+        cat("Q2. Which clause can calculate the upper bound of a confidence interval?",
+            "    Suppose: sample mean = 2, standard error = 1.5, confidence level = 90%",
+            "  1. > coef <- pnorm(0.9)",
+            "     > upper <- 2 + coef * 1.5",
+            "  2. > coef <- abs(qnorm(-0.05))",
+            "     > upper <- 2 + coef * 1.5",
+            "  3. > coef <- abs(qnorm(0.1, lower.tail = F))",
+            "     > upper <- 2 + coef * 1.5",
+            "  4. > coef <- qnorm(-0.1)",
+            "     > upper <- 2 + coef * 1.5",
+            "", sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "2"){
+          message("Hoorey~ Corret answer!")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "4")){
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The only right answer is 2.")
+            message("Z-value cannot be calculated by pnorm();")
+            message("Be careful while using argument 'lower.tail=FALSE'.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Which command has absolutely INCORRECT answer?",
+            "Suppose: x <- -10:10",
+            "  1. > sample(x[x>8])",
+            "       [1] 10 9",
+            "  2. > sample(x[x>7], 10, replace = T)",
+            "       [1] 10  9 10  9  9 10  8  9 10 10",
+            "  3. > sample(x[x<(-9)])",
+            "       [1] -10",
+            "  4. > sample(x[x<(-5)], 5)",
+            "       [1]  -8  -7 -10  -6  -9",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "3"){
+          message("Great! You still have 2 questions to answer!")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "2", "4")){
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("You have run out of 3 trials...")
+            message("Command no. 2 generates permutation of 1:10!")
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 4
+      q4 <- 1
+      repeat{
+        cat("Q4. Which statement below is TRUE:",
+            "  1. Suppose mean = mu, standard error = se, the 2 lines have same result:",
+            "     > prob <- pnorm(mu+se) - pnorm(mu-se)",
+            "     > prob <- 1 - pnorm(mu+se, lower.tail = F) - pnorm(mu-se)",
+            "",
+            "  2. For standard normal distribution:",
+            "     > qnorm(0.8,lower.tail=F) == qnorm(.3)",
+            "",
+            "  3. The command below generates error message:",
+            "     > sample(1, 100, replace = T)",
+            "",
+            "  4. For standard normal distribution:", 
+            "     > dnorm(0) == 1/sqrt(2*pi)*exp(-1/2)",
+            "", sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "1"){
+          message("One question to go! Ganbade!")
+          cat("\n")
+          break
+        }else if(ans %in% c("2", "3", "4")){
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 1st option.")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 5
+      q5 <- 1
+      repeat{
+        cat("Q5. Which statement below is TRUE:",
+            "  1. Higher Z value, higher significance level;",
+            "  2. In normal distribution, smaller standard deviation means steeper",
+            "     curve and narrower spread (regarding the bell curve);",
+            "  3. Standard error of a sample shares the same formula of standard",
+            "     deviation of population;",
+            "  4. dnorm(x) reflects the probability of observing the value x.",
+            "", sep = "\n")
+        ans <- readline("Your answer (no. of line): ")
+        if (ans == "2"){
+          message("Congratulations! You have finished the exercise 2.3!")
+          message("See you in next set of exercises~")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "3", "4")){
+          q5 <- q5 + 1
+          
+          if (q5>3){
+            message("You have tried 3 times...")
+            message("The correct answer is 2.")
+            message("See you around~")
+            cat("\n")
+            break
+          }else{
+            message("Try~~~~again~~~~~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      cat("Exercise 2.3 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+        cat("\n")
+      }
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'!")
+        }
+      }
+      
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
@@ -1559,4 +1795,5 @@ r.ex <- function(){
   # UPDATE6: 10/22/2014. EXERCISES 1.4
   # UPDATE7: 10/29/2014. EXERCISES 2.1 BY KATHERINE.HOU
   # UPDATE8: 10/30/2014. EXERCISES 2.2
+  # UPDATE9: 10/31/2014. EXERCISES 2.3
 }
