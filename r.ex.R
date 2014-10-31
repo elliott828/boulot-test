@@ -1555,7 +1555,7 @@ r.ex <- function(){
             "  1. We expect 95% of the random samples (with same size)",
             "     to contain the true population mean",
             "  2. 95% confident that the sample mean in this interval",
-            "  3. 95% of the time the true mean will be in this interval",
+            "  3. 95% of the time the true population mean will be in this interval",
             "  4. We expect 95% of the intervals to contain the true sample mean",
             "",
             sep = "\n")
@@ -1630,14 +1630,14 @@ r.ex <- function(){
       # Question 3
       q3 <- 1
       repeat{
-        cat("Which command has absolutely INCORRECT answer?",
+        cat("Q3. Which command has absolutely INCORRECT answer?",
             "Suppose: x <- -10:10",
             "  1. > sample(x[x>8])",
             "       [1] 10 9",
             "  2. > sample(x[x>7], 10, replace = T)",
             "       [1] 10  9 10  9  9 10  8  9 10 10",
-            "  3. > sample(x[x<(-9)])",
-            "       [1] -10",
+            "  3. > sample(x[x>9)])",
+            "       [1] 10",
             "  4. > sample(x[x<(-5)], 5)",
             "       [1]  -8  -7 -10  -6  -9",
             "",
@@ -1652,7 +1652,7 @@ r.ex <- function(){
           
           if (q3>3){
             message("You have run out of 3 trials...")
-            message("Command no. 2 generates permutation of 1:10!")
+            message("Command no. 3 generates permutation of 1:10!")
             cat("\n")
             break
           }else{
