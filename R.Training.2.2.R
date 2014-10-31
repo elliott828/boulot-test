@@ -39,7 +39,9 @@ write.table(mtcars, file = "C:/Users/mtcars3.txt")
 write.table(mtcars, file = "C:\\Users\\mtcars4.txt")
 # be careful on the direction of slash
 # The address in WINDOWS platform is backslash: "C:\Users\R-Test"
+# R read "C:\Users\R-Test" as "C:UsersR-Test" -- "\" is the escape symbol
 # Using slash or double backslash for specifying the address in write.table()
+# That also applies while using other message output functions (will be mentioned below)
 
 #---------------------------------------------------------------------
 # what if i want to save the data frame to a .csv file?
