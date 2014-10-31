@@ -153,7 +153,9 @@ lower95 <- avg.hp - 1.96 * se.hp
 ci95 <- c(lower95, higher95)
 ci95
 # it means we are 95% confident that the true avg. horse power of all American cars
-# is between 123 and 170
+# is between 123 and 170;
+# if we make hundreds of samples with same size, 95% of the samples will yield 
+# confidence intervals that contain the true population mean.
 
 #---------------------------------------------------------------------
 # where does the "1.96" come from?
