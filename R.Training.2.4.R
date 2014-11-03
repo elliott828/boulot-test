@@ -35,6 +35,7 @@ plot(mlb11$hits, mlb11$bat_avg)
 # correlation among 3+ variables
 cor.total <- cor(mlb11[2:ncol(mlb11)])
 cor.total[1:5,1:5]
+
 #=====================================================================
 #--------------#
 # Linear Model #
@@ -112,14 +113,147 @@ hist(fit1$residuals)
 #---------------------------------------------------------------------
 # to find the best predictor
 # do the modeling for each of the independent variables
-r.square <- function(pred){
+r.sq <- function(pred){
   fit <- lm(as.formula(sprintf("%s ~ %s","runs", pred)),mlb11)
   return(round(summary(fit)$r.square,3))
 }
 
-sapply(names(mlb11[3:12]),r.square)
+sort(sapply(names(mlb11[3:12]),r.sq), decreasing = T)
 # the best traditional predictor is bat_avg: batting average
 # the best new predictor is new_obs: on base rate + slugging rate
+
+#=====================================================================
+#-----------------------#
+# Multiple Linear Model #
+#-----------------------#
+# Is the best predictor explaining everything?
+# mtcars dataset
+
+?mtcars
+
+# Plotting based on variable types
+
+# scatterplot between Miles/gallon and Gross horsepower
+# plot between 2 numeric variables
+plot(mtcars$mpg ~ mtcars$hp)
+
+# side-by-side boxplot for Miles/gallon and transmission method
+# categorical variable: transmission  (0 = auto; 1 = manual)
+# plot between a numeric and a categorical variables
+boxplot(mtcars$mpg ~ mtcars$am)
+
+# mosaic plot for cylinder number and transmission method
+# plot between 2 categorical variables
+mosaicplot(mtcars$cyl ~ mtcars$am)
+
+#---------------------------------------------------------------------
+# build up simple model
+#------------------#
+# Stepwise forward #
+#------------------#
+# find out the best predictor
+r.sq.bis <- function(pred){
+  fit <- lm(as.formula(sprintf("%s ~ %s","mpg", pred)),mtcars)
+  return(round(summary(fit)$r.square,3))
+}
+
+sort(sapply(names(mtcars[2:ncol(mtcars)]),r.sq.bis), decreasing = T)
+
+# begin modeling by wt (weight of a car)
+fit2 <- lm(mpg ~ wt, data = mtcars)
+# fit2 <- lm(mtcars$mpg ~ mtcars$wt)
+summary(fit2)
+# p-value = 1.29e-10, wt is a significant predictor
+
+plot(fit2)
+abline(fit2)
+
+# Residual Plot (Residuals vs. Fitted)
+# QQ Plot (Normal Q-Q)
+# Scale - Location
+# Leverage - mark the outliers which has obvious leverage effect on model result
+
+plot(mtcars$mpg ~ mtcars$wt)
+abline(fit2)
+
+# Always choose a predictor:
+# 1. which improves the model best
+# 2. which is significant
+# taking into account cyl (no. of cylinder)
+fit2.1 <- lm(mpg ~ wt + cyl, data = mtcars)
+summary(fit2.1)
+# p-value of cyl is 0.001064, significant predictor
+# R-square = 0.8302
+
+# taking into account disp (displacement)
+fit2.2 <- update(fit2, ~.+ disp)
+# if: fit2 <- lm(mtcars$mpg ~ mtcars$wt)
+# then: IT'S OBLIGED TO SPECIFY data source
+#       fit2.2 <- update(fit2, ~.+ disp, data = mtcars) 
+summary(fit2.2)
+# p-value of disp is 0.06362, a significant predictor
+# R-square = 0.7809, lower than previous model fit2.1
+
+# try hp
+fit2.3 <- update(fit2, ~.+ mtcars$hp)
+summary(fit2.3)
+# p-value of hp is 0.00145, significant predictor
+# R-square = 0.8268, still lower than fit2.1
+# hp is more or less good, we can continue trying other variables...
+
+# finally
+fit.forward <- lm(mpg ~ wt + cyl + hp, data = mtcars)
+summary(fit.forward)
+# R-squre = 0.8431; Model p-value = 2.184e-11
+
+#---------------------------------------------------------------------
+#-------------------#
+# Stepwise backward #
+#-------------------#
+# we put all variables in the model
+fit3 <- lm(mpg ~ ., mtcars)
+summary(fit3)
+# p-value of cyl is the highest: 0.9161
+
+# Always choose the variable to eliminate
+# 1. with the highest p-value
+# 2. without which the model has the best fitness
+# 3. until all predictors become significant
+fit3.1 <- update(fit3, ~. -cyl)
+summary(fit3.1)
+# R square = 0.8689
+fit3.2 <- update(fit3.1, ~. -vs)
+summary(fit3.2)
+# R square = 0.8687
+# fit3.1
+# and we continue testing...
+
+# finally
+fit.backward <- lm(mpg ~ wt + qsec + am, data = mtcars)
+# R-square = 0.8497; Model p-value = 1.21e-11
+
+#---------------------------------------------------------------------
+#----------------------------------------#
+# Comparison between results of 2 models #
+#----------------------------------------#
+# Why 2 approaches lead different models?
+# 1. sometimes they do lead to a same model
+# 2. stepwise modeling from different start points possibly lead to different result
+#    because the impact (to a model) of removing a predictor and inserting one
+#    is totally different.
+#    Imagine that you go downhill from different direction, you will always reach
+#    the foot of the hill, but the destination might not be of the same height 
+# 3. The result of the 2 algorithm would be quite similar (if they are not equal)
+
+#---------------------------------------------------------------------
+#---------------------#
+# Optional: stepAIC() #
+#---------------------#
+# automatically execute stepwise regression
+library(MASS)
+fit.1 <- stepAIC(fit2, scope = ~cyl+disp+hp+drat+wt+qsec+vs+am+gear+carb, 
+                 direction = "forward")
+fit.2 <- stepAIC(fit3, trace =F)
 
 #---------------------------------------------------------------------
 # Session 2.4 Review
@@ -134,9 +268,21 @@ sapply(names(mlb11[3:12]),r.square)
 #     ~ key statistics
 #     ~ key elements of summary - how to extract them
 #   * How to tell the reliability of a model
+# - Multiple linear regression
+#   * Stepwise forward
+#   * Stepwise backward
+#   * update(model, formula)
+#   * How to explain the difference between the different results of 
+#     2 stepwise regression methods
 # - Model plotting
 #   * Plot a model
 #   * 4 methods to plot residuals
+#   * Plotting based on variable types
+#     ~ Scatter plot
+#     ~ Box plot
+#     ~ Mosaic plot
+#     ~ Histogram
+# - Optional: stepAIC()
 #---------------------------------------------------------------------
 
 # finished on Thu. 11/3/2014
