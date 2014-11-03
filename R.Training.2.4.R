@@ -237,10 +237,11 @@ fit.backward <- lm(mpg ~ wt + qsec + am, data = mtcars)
 # Comparison between results of 2 models #
 #----------------------------------------#
 # Why 2 approaches lead different models?
-# 1. sometimes they do lead to a same model
+# 1. sometimes they do lead to a same model (by chance or if you try all possibility)
 # 2. stepwise modeling from different start points possibly lead to different result
 #    because the impact (to a model) of removing a predictor and inserting one
-#    is totally different.
+#    is totally different. Every variable (or group of var.s) has unique influence
+#    on other(s) variable(s), different group leads to different R-square and p-value
 #    Imagine that you go downhill from different direction, you will always reach
 #    the foot of the hill, but the destination might not be of the same height 
 # 3. The result of the 2 algorithm would be quite similar (if they are not equal)
