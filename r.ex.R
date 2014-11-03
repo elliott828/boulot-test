@@ -58,13 +58,14 @@ r.ex <- function(){
           " 2.1 - Control Flow & Self-defined Function",
           " 2.2 - Input & Output",
           " 2.3 - Fundamental Statistics",
+          " 2.4 - Linear Regression Model",
           " ",
           " 0. Exit this exercise program",
           " ", sep = "\n")
       no.set <- readline("Please enter the session number: ")
       # check1 <- regular expression
       # check2 <- no.set %in% c(seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))
-      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.3,0.1),seq(3.1,3.5,0.1))){
+      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.4,0.1),seq(3.1,3.5,0.1))){
         break
       }else{
         message("Just enter number of exercise set listed above please.")
@@ -1771,6 +1772,254 @@ r.ex <- function(){
         }
       }
       
+    }else if (no.set == 2.4){
+      
+      #---------------#
+      # Exercises 2.4 #
+      #---------------#
+      cat("\n")
+      msm <- "Training Exercise 2.4 - Linear Regression Model"
+      message(msm)
+      message(rep("-", nchar(msm)))
+      message("There are 5 exercises below for this training session.")
+      cat("\n")
+      
+      # Question 1
+      q1 <- 1 # initialize the count of answer times
+      repeat{
+        cat("Q1. Which statement below is NOT right?",
+            "  1. Scatterplot can be used to describe the relationship ",
+            "     between 2 categorical variables;",
+            "  2. We can use mosaic plot to explore the relation between ",
+            "     2 categorical variables;",
+            "  3. Boxplot is mostly used to compare a numeric variable per",
+            "     different aspect of a categorical variable;",
+            "  4. Histogram put numeric data in adjacent intervals.cells of",
+            "     same interval length.",
+            "",
+            sep = "\n")
+        ans <- readline("Your answer: ")
+        # ans.bis <- as.numeric(ans)
+        if (ans == "1"){
+          message("Correct! Let's move to the next question.")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "3", "4")){
+          q1 <- q1 + 1
+          
+          if(q1>3){
+            message("Oops, game over! Correct answer below:")
+            message("The answer is option1!")
+            message("Scatterplot compares numeric variables!")
+            message("Let's move to the next question.")
+            cat("\n")
+            break
+          }else{
+            message("Bang! Wrong answer! Try again~")
+            message("Just enter a number between 1 and 4, without any other characters.")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 2
+      q2 <- 1
+      repeat{
+        attach(mtcars)
+        plot(mpg ~ hp)
+        detach(mtcars)
+        cat("Q2. Looking at the plot, which of the following BEST describe the relationship",
+            "    between the two variables?",
+            "    (data source: mtcars; mpg: miles per gallon; hp: horsepower)",
+            "  1. The relationship is positive, linear, and very weak. ",
+            "     There are no outliers.",
+            "  2. The relationship is positive, linear, and moderately strong. ",
+            "     One of the potential outliers is a car with approximately 350 horsepower.",
+            "  3. The relationship is negative, linear, and moderately strong. ",
+            "     One of the potential outliers is a car with approximately 350 horsepower.",
+            "  4. The relationship is negative, linear, and very weak. ",
+            "     One of the potential outliers is a car with approximately 350 horsepower.",
+            "", sep = "\n")
+        ans <- readline("Your answer: ")
+        if (ans == "3"){
+          message("Hoorey~ Corret answer!")
+          cat("\n")
+          break
+        }else if (ans %in% c("1", "2", "4")){
+          q2 <- q2 + 1
+          
+          if (q2>3){
+            message("Stop and think, and try it again if you want after all exercises finished.")
+            message("The right answer is 3.")
+            message("The relationship between the 2 variables are nearly negatively linear.")
+            cat("\n")
+            break
+          }else{
+            message("Bang-bang! Try again please")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 3
+      q3 <- 1
+      repeat{
+        cat("Q3. Run the commands below to build a model and check its summary:",
+            "  > fit <- lm(mpg ~ wt, data = mtcars)",
+            "  > summary(fit)",
+            "", sep = "\n")
+        cat(paste(rep("-",50),collapse=""))
+        fit <- lm(mpg ~ wt, data = mtcars)
+        print(summary(fit))
+        cat(paste(rep("-",50),collapse=""),"",sep="\n")
+        cat("What does the slope tell us in the context of the relationship between",
+            "fule economy (miles per gallon) and the weight of a car?",
+            "",
+            "  1. For each additional thousand pounds a car weights, the model predicts",
+            "     5.34 less miles per gallon, on average.",
+            "  2. For each additional thousand pounds a car weights, the model predicts",
+            "     5.34 more miles per gallon, on average.",
+            "  1. For each additional thousand pounds a car weights, the model predicts",
+            "     37.29 less miles per gallon, on average.",
+            "  1. For each additional thousand pounds a car weights, the model predicts",
+            "     37.29 more miles per gallon, on average.",
+            "", sep = "\n")
+        
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "1"){
+          message("Great! You still have 2 questions to answer!")
+          cat("\n")
+          break
+        }else if(ans %in% c("2", "3", "4")){
+          q3 <- q3 + 1
+          
+          if (q3>3){
+            message("You have run out of 3 trials...")
+            message("The correct answer is option 1!")
+            cat("\n")
+            break
+          }else{
+            message("Ah-oh~ try again please~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 4
+      q4 <- 1
+      repeat{
+        plot(summary(fit)$residuals)
+        abline(0,0)
+        cat("Q4. Concerning the residual plot of previous model, which statement is FALSE?",
+            "  1. The residuals appear to be randomly distributed around 0;",
+            "  2. The residuals show a curved pattern;",
+            "  3. The plot is indicative of a linear relationship between fuel economy",
+            "     and car weight;",
+            "  4. The cars with a very high residual compared to the others appears to be outliers.", 
+            "", sep = "\n")
+        ans <- readline("Your answer (enter the option number): ")
+        if (ans == "2"){
+          message("One question to go! Ganbade!")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "3", "4")){
+          q4 <- q4 + 1
+          
+          if (q4>3){
+            message("Oulala~no more chance for this question~")
+            message("The correct answer is the 2nd option.")
+            message("There is no curve pattern regarding the residuals.")
+            cat("\n")
+            break
+          }else{
+            message("Come on~ Try again!")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      # Question 5
+      q5 <- 1
+      repeat{
+        cat("Q5. Which statement below is TRUE:",
+            "  1. Backward and forward stepwise regression based on same dataset will",
+            "     eventually lead to a same model;",
+            "  2. Backward stepwise regression always removes the variable which has the smallest",
+            "     p-value of its t-test;",
+            "  3. Forward stepwise regression always adds significant predictor which brings",
+            "     the best R-square;",
+            "  4. Forward stepwise regression always removes the variable which has the largest",
+            "     p-value of its t-test",
+            "", sep = "\n")
+        ans <- readline("Your answer (no. of line): ")
+        if (ans == "3"){
+          message("Congratulations! You have finished the exercise 2.4!")
+          message("See you in next set of exercises~")
+          cat("\n")
+          break
+        }else if(ans %in% c("1", "2", "4")){
+          q5 <- q5 + 1
+          
+          if (q5>3){
+            message("You have tried 3 times...")
+            message("The correct answer is 3.")
+            message("See you around~")
+            cat("\n")
+            break
+          }else{
+            message("Try~~~~again~~~~~")
+            cat("\n")
+          }
+        }else{
+          cat("\n")
+          message("Only numbers between 1 and 4 are acceptable!")
+          cat("\n")
+        }
+      }
+      
+      cat("Exercise 2.4 statistics:",
+          paste("You made ", q1-1, " mistake", if(q1<3){""}else{"s"}, " for Q1;", sep =""),
+          paste("You made ", q2-1, " mistake", if(q2<3){""}else{"s"}, " for Q2;", sep =""),
+          paste("You made ", q3-1, " mistake", if(q3<3){""}else{"s"}, " for Q3;", sep =""),
+          paste("You made ", q4-1, " mistake", if(q4<3){""}else{"s"}, " for Q4;", sep =""),
+          paste("You made ", q5-1, " mistake", if(q5<3){""}else{"s"}, " for Q5;", sep =""),
+          "", sep = "\n")
+      
+      if(q1+q2+q3+q4+q5-5 == 0){
+        message("You made no mistake at all in this set of exercise! Congratulations!")
+        cat("\n")
+      }
+      
+      repeat{
+        cho <- readline("Do you want to do this exercise again or try other exercise (Y/N)? ")
+        cat("\n")
+        if (toupper(cho) == "Y"){
+          return(no.ex())
+        }else if (toupper(cho) == "N"){
+          message("c ya~")
+          cat("\n")
+          break
+        }else{
+          message("Please only enter 'Y' or 'N'!")
+        }
+      }
+      
     }else{
       message("Not developed yet... To be released after next session... :P")
     }
@@ -1796,4 +2045,5 @@ r.ex <- function(){
   # UPDATE7: 10/29/2014. EXERCISES 2.1 BY KATHERINE.HOU
   # UPDATE8: 10/30/2014. EXERCISES 2.2
   # UPDATE9: 10/31/2014. EXERCISES 2.3
+  # UPDATE10: 11/3/2014. EXERCISES 2.4
 }
