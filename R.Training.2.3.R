@@ -209,4 +209,4 @@ ci99
 #   * Calculation among confidence level, significance level and Z value
 #---------------------------------------------------------------------
 
-# finished on Thu. 10/31/2014
+# finished on Fri. 10/31/2014
