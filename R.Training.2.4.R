@@ -113,12 +113,13 @@ hist(fit1$residuals)
 #---------------------------------------------------------------------
 # to find the best predictor
 # do the modeling for each of the independent variables
-r.sq <- function(pred){
-  fit <- lm(as.formula(sprintf("%s ~ %s","runs", pred)),mlb11)
+r.sq <- function(pred, resp, data){
+  fit <- lm(as.formula(sprintf("%s ~ %s",resp, pred)),data)
   return(round(summary(fit)$r.square,3))
 }
 
-sort(sapply(names(mlb11[3:12]),r.sq), decreasing = T)
+sort(sapply(names(mlb11[3:12]),r.sq, resp = "runs", data = mlb11), 
+     decreasing = T)
 # the best traditional predictor is bat_avg: batting average
 # the best new predictor is new_obs: on base rate + slugging rate
 
@@ -152,12 +153,9 @@ mosaicplot(mtcars$cyl ~ mtcars$am)
 # Stepwise forward #
 #------------------#
 # find out the best predictor
-r.sq.bis <- function(pred){
-  fit <- lm(as.formula(sprintf("%s ~ %s","mpg", pred)),mtcars)
-  return(round(summary(fit)$r.square,3))
-}
-
-sort(sapply(names(mtcars[2:ncol(mtcars)]),r.sq.bis), decreasing = T)
+# recall r.sq(pred, resp, data)
+sort(sapply(names(mtcars[2:ncol(mtcars)]),r.sq, resp = "mpg", data = mtcars), 
+     decreasing = T)
 
 # begin modeling by wt (weight of a car)
 fit2 <- lm(mpg ~ wt, data = mtcars)
