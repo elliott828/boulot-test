@@ -9,7 +9,7 @@
 # examine the linear relationship between runs scored in a season 
 # and a number of other player statistics
 
-load("baseball.RData")
+load("mlb11.RData")
 str(mlb11)
 
 # load the introduction of dataset
