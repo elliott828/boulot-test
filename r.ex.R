@@ -51,21 +51,28 @@ r.ex <- function(){
     cat("\n")
     repeat{
       cat("Please choose the set of training exercises listed below:",
-          " 1.1 - Basic Intro & Sequence",
-          " 1.2 - Vector & Factor",
-          " 1.3 - Matrix, Data Frame & Subsetting",
-          " 1.4 - List & Missing Values",
-          " 2.1 - Control Flow & Self-defined Function",
-          " 2.2 - Input & Output",
-          " 2.3 - Fundamental Statistics",
-          " 2.4 - Linear Regression Model",
-          " ",
-          " 0. Exit this exercise program",
+          "PART I - BASIC CONCEPT",
+          "  1.1 - Basic Intro & Sequence",
+          "  1.2 - Vector & Factor",
+          "  1.3 - Matrix, Data Frame & Subsetting",
+          "  1.4 - List & Missing Values",
+          "",
+          "PART II - ADVANCED OPERATION",
+          "  2.1 - Control Flow & Self-defined Function",
+          "  2.2 - Input & Output",
+          "  2.3 - Fundamental Statistics",
+          "  2.4 - Linear Regression Model",
+          "",
+          "PART III - PLOTTING & APPLICATION",
+          "  3.1 - Basic Intro to Graphic Tools",
+          "  3.2 - MSU Modeling Tool",
+          "",
+          "0. Exit this exercise program",
           " ", sep = "\n")
       no.set <- readline("Please enter the session number: ")
       # check1 <- regular expression
       # check2 <- no.set %in% c(seq(1.1,1.5,0.1),seq(2.1,2.7,0.1),seq(3.1,3.5,0.1))
-      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.4,0.1),seq(3.1,3.5,0.1))){
+      if (no.set %in% c(0, seq(1.1,1.4,0.1),seq(2.1,2.4,0.1),seq(3.1,3.2,0.1))){
         break
       }else{
         message("Just enter number of exercise set listed above please.")
@@ -1804,7 +1811,7 @@ r.ex <- function(){
           message("Correct! Let's move to the next question.")
           cat("\n")
           break
-        }else if (ans %in% c("1", "3", "4")){
+        }else if (ans %in% c("2", "3", "4")){
           q1 <- q1 + 1
           
           if(q1>3){
@@ -1887,9 +1894,9 @@ r.ex <- function(){
             "     5.34 less miles per gallon, on average.",
             "  2. For each additional thousand pounds a car weights, the model predicts",
             "     5.34 more miles per gallon, on average.",
-            "  1. For each additional thousand pounds a car weights, the model predicts",
+            "  3. For each additional thousand pounds a car weights, the model predicts",
             "     37.29 less miles per gallon, on average.",
-            "  1. For each additional thousand pounds a car weights, the model predicts",
+            "  4. For each additional thousand pounds a car weights, the model predicts",
             "     37.29 more miles per gallon, on average.",
             "", sep = "\n")
         
@@ -2036,9 +2043,11 @@ r.ex <- function(){
   
   
   # CREATION: 8/4/2014. EXERCISES 1.1
-  # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; ADD EXERCISE STATISTICS
+  # UPDATE1: 8/4/2014. ADD "EXIT/QUIT" OPTION TO THE MAIN MENU; 
+  #                    ADD EXERCISE STATISTICS
   # UPDATE2: 8/18/2014. EXERCISES 1.2
-  # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, PROGRAM STOPS WITH ERROR MESSAGE
+  # UPDATE3: 8/18/2014. RESOLVE THE BUG: WHEN A RANDOM VALUE (I.E. SPACE) ENTERED, 
+  #                     PROGRAM STOPS WITH ERROR MESSAGE
   # UPDATE4: 8/22/2014. EXERCISES 1.3
   # UPDATE5: 8/25/2014. OPTIONAL EXERCEISES FOR SESSION 1.3
   # UPDATE6: 10/22/2014. EXERCISES 1.4
@@ -2046,4 +2055,6 @@ r.ex <- function(){
   # UPDATE8: 10/30/2014. EXERCISES 2.2
   # UPDATE9: 10/31/2014. EXERCISES 2.3
   # UPDATE10: 11/3/2014. EXERCISES 2.4
+  # UPDATE11: 11/4/2014. EXERCISES STRUCTURE MODIFICATION;
+  #                      BUG FIXED IN EXERCISES 2.4: Q1 LOOP PROBLEM.
 }
