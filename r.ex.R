@@ -58,7 +58,7 @@ r.ex <- function(){
           "  1.4 - List & Missing Values",
           "",
           "PART II - ADVANCED OPERATION",
-          "  2.1 - Control Flow & Self-defined Function",
+          "  2.1 - Control Flow & Self-Defined Function",
           "  2.2 - Input & Output",
           "  2.3 - Fundamental Statistics",
           "  2.4 - Linear Regression Model",
