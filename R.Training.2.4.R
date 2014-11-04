@@ -291,4 +291,4 @@ fit.3 <- stepAIC(fit2,
 # - Optional: stepAIC()
 #---------------------------------------------------------------------
 
-# finished on Thu. 11/3/2014
+# finished on Mon. 11/3/2014
