@@ -242,7 +242,7 @@ fit.backward <- lm(mpg ~ wt + qsec + am, data = mtcars)
 #    on other(s) variable(s), different group leads to different R-square and p-value
 #    Imagine that you go downhill from different direction, you will always reach
 #    the foot of the hill, but the destination might not be of the same height 
-# 3. The result of the 2 algorithm would be quite similar (if they are not equal)
+# 3. The result of the 2 algorithms would be quite similar (if they are not equal)
 
 #---------------------------------------------------------------------
 #---------------------#
