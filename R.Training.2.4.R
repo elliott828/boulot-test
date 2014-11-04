@@ -250,9 +250,16 @@ fit.backward <- lm(mpg ~ wt + qsec + am, data = mtcars)
 #---------------------#
 # automatically execute stepwise regression
 library(MASS)
+# stepwise forward
 fit.1 <- stepAIC(fit2, scope = ~cyl+disp+hp+drat+wt+qsec+vs+am+gear+carb, 
                  direction = "forward")
+# stepwise backward
 fit.2 <- stepAIC(fit3, trace =F)
+# stepwise of both direction
+fit.3 <- stepAIC(fit2, 
+                 scope = list(upper = ~cyl+disp+hp+drat+wt+qsec+vs+am+gear+carb,
+                              lower = ~1),
+                 direction = "both")
 
 #---------------------------------------------------------------------
 # Session 2.4 Review
