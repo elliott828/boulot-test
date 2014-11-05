@@ -46,6 +46,7 @@ write.table(mtcars, file = "C:\\Users\\mtcars4.txt")
 #---------------------------------------------------------------------
 # what if i want to save the data frame to a .csv file?
 write.table(mtcars, file = "mtcars1.csv", sep = ",")
+# the column names are not correctly matched with the data.
 
 # or, we can try this function:
 write.csv(mtcars, "mtcars2.csv")
