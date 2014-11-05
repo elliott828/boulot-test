@@ -43,45 +43,7 @@ In this expanded list, each choice wins against the preceding two choices and lo
 4. Implement the second part of `rpsls()` that generates the computer's guess and prints out an appropriate message for that guess. In particular, compute a random number `comp_number` between 0 and 4 that corresponds to the computer's guess using the function `sample()`. Then compute the name `comp_choice` corresponding to the computer's number using the function `number_to_name()` and print an appropriate message with the computer's choice to the console.
 
 5. Implement the last part of `rpsls()` that determines and prints out the winner. Specifically, compute the difference between `comp_number` and `player_number` taken modulo five. Then write an `if`/`else if`/`else` statement whose conditions test the various possible values of this difference and then prints an appropriate message concerning the winner.
-```{r, echo = FALSE}
-rpsls <- function(player_choice) {
-    
-    name_to_number <- function(name) {
-        if(name == "rock") {num <- 0
-        } else if(name == "Spock") {num <- 1
-        } else if(name == "paper") {num <- 2
-        } else if(name == "lizard") {num <- 3
-        } else if(name == "scissors") {num <- 4
-        } else stop("Invalid name!")
-        num
-    }
-    
-    number_to_name <- function(num) {
-        if(num == 0) {name <- "rock"
-        } else if(num == 1) {name <- "Spock"
-        } else if(num == 2) {name <- "paper"
-        } else if(num == 3) {name <- "lizard"
-        } else if(num == 4) {name <- "scissors"
-        } else stop("Invalid number!")
-        name
-    }
-    
-    num <- name_to_number(player_choice)
-    cat("Player chooses", player_choice, sep = " ")
-    cat("\n")
-    
-    comp_num <- sample(0:4, 1)
-    name <- number_to_name(comp_num)
-    cat("Computer chooses", name, sep = " ")
-    cat("\n")
-    
-    dif <- num - comp_num
-    if(dif == 0) {cat("Player and computer tie!")
-    } else if(dif%%5 <= 2) {cat("Player wins!")
-    } else if(dif%%5 >= 3) {cat("Computer wins!")
-    }
-}
-```
+
 This will be the only mini-project in the class. Since we have not yet learned enough to allow you to play the game interactively, you will simply call your rpsls function repeatedly in the program with different player choices. You will see that we have provided five such calls at the bottom. Running your program repeatedly should generate different computer guesses and different winners each time. While you are testing, feel free to modify those calls.
 
 The output of running your program should have the following form:
@@ -127,3 +89,4 @@ I will assess your mini-project according to the rubric given below. Small devia
 *Thank you very much for your support to MSU's R Training Program!*
 
 *Nov., 2014*
+<edit by Katherine, 11/5/2014>
