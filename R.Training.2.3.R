@@ -105,7 +105,7 @@ right.tail <- pnorm(mu+sigma, lower.tail=F)
 qnorm(0)
 qnorm(0.2)
 qnorm(0.5)
-qnorm(0.8,lower.tail=F) == qnorm(.2)
+qnorm(0.8,lower.tail=F) # compared with qnorm(.2)
 qnorm(1)
 
 #---------------------------------------------------------------------
