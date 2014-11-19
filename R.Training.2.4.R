@@ -68,7 +68,7 @@ resume
 # plot models
 plot(mlb11$runs ~ mlb11$at_bats)
 # compare with plot(mlb11$runs, mlb11$at_bats)
-abine(fit1)
+abline(fit1)
 
 #---------------------------------------------------------------------
 # elements of summary(fit1)
