@@ -3,7 +3,10 @@
 ## 1. co(x, co.rate)                     | ~ carryover effect transformation
 ## 2. sc(x, lamda1, lamda2)              | ~ s-curve transformation
 ## 3. pc(x, exponent)                    | ~ power curve transformation
-## 4. bt(x, type, object)                | ~ +,-,*,/ with certain object and other basic transformation
+## 4. cs(x, co.rate, lamda1, lamda2)     | ~ carryover + s-curve transformation
+## 5. cp(x, co.rate, expnent)            | ~ carryover + power curve transformation
+## 6. bt(x, type, object)                | ~ +,-,*,/ with certain object and other basic transformation
+## 7. cs.vs.cp(pred, resp, data, type, model) | ~ 
 ##=========================================================================================================
 
 #-------------------#
@@ -11,11 +14,13 @@
 #-------------------#
 
 co <- function(x, co.rate){
+  #---------------------------------
   # carry over effect
   # formula: period2 = period1 * carryover rate + period2
   # x: variable to be transformed
   # co.rate: carry over rate
   # make sure the 'x' already exists in the environment
+  #---------------------------------
   
   for (p in 2:length(x)){
     if (is.na(x[p-1])){
@@ -57,11 +62,38 @@ pc <- function(x,exponent) x^exponent
 
 #=====================================================================
 
+#-----------------------------------#
+# 4. cs(x, co.rate, lamda1, lamda2) #
+#-----------------------------------#
+
+cs <- function(x, co.rate, lamda1, lamda2){
+  # carryover + s-curve
+  # x <- sc(co(x, co.rate), lamda1, lamda2)
+  x <- 1 - exp(-lamda1 * co(x, co.rate)^lamda2)
+  x
+}
+
+#=====================================================================
+
+#-----------------------------------#
+# 5. cp(x, co.rate, exponent) #
+#-----------------------------------#
+
+cp <- function(x, co.rate, exponent){
+  # carryover + power curve
+  # x <- pc(co(x, co.rate), exponent)
+  x <- co(x, co.rate)^exponent
+  x
+}
+
+#=====================================================================
+
 #-------------------------------#
-# 4. bt(x, type, object = NULL) #
+# 6. bt(x, type, object = NULL) #
 #-------------------------------#
 
 bt <- function(x, type, object = NULL){
+  #---------------------------------
   # basic transformation:
   # 1.1~1.4: +,-,*,/
   # 2: logarithm
@@ -113,14 +145,14 @@ bt <- function(x, type, object = NULL){
     
     # check the sign of object
     opt <- LETTERS[sign(object)+2]
-    object <- abs(object)
+    object <- abs(as.numeric(object))
     switch(opt,
            # object < 0: backward time lag
-           A = c(x[(object+1):length(x)],rep(NA, object)),
+           A = c(x[(object+1):length(x)],rep(0, object)),
            # object = 0: no time lag
            B = x,
            # object > 0: forward time lag
-           C = c(rep(NA, object),x[1:(length(x)-object)]))
+           C = c(rep(0, object),x[1:(length(x)-object)]))
     
   }
   
@@ -146,15 +178,5 @@ bt <- function(x, type, object = NULL){
 
 #=====================================================================
 
-
-
-
-
-
-
-
-
-
-
-
-# CREATION: 11/7/2014 co(),sc(),pc(),bt() creation
+# CREATION 11/7/2014: co(),sc(),pc(),bt() creation
+# UPDATE 11/10/2014: cs(), cp() creation (replace the functionality of sc() and pc())
