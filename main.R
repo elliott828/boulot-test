@@ -3,9 +3,10 @@
 # trial: update a model  based on pointed variables, transformation type and parameters #
 # recom: test transformation and provide recommendation for trans method and parameters #
 # rebuild: rebuild a model based on parameter testing history from last modeling result #
+# warn: pop up warning messages if sign of coef changes or p-value of a predictor > 0.2 #
 #---------------------------------------------------------------------------------------#
 
-modif <- function(pred, type, data, co.r=NULL, sc.1=NULL, sc.2=NULL, pc.r=NULL, object=NULL){
+modif <- function(pred, type, data, co.r=NULL, sc.1=NULL, sc.2=NULL, pc.r=NULL, object=NULL, obj.name=obj.name){
   #---------------------------------
   # transform specified variable with(out) parameters
   # this function returns **a dataset** with selected variable transformed
@@ -13,6 +14,7 @@ modif <- function(pred, type, data, co.r=NULL, sc.1=NULL, sc.2=NULL, pc.r=NULL, 
   #---------------------------------
   # pred: the name of variable to be transormed of class "character"
   # type: transformation method:
+  #       0: no transformation
   #       1.1~1.2 media: carryover + s-curve / carryover + power curve
   #       2.1.1~2.1.4 basic: +,-,*,/; corresponding to parameter "object"
   #       2.2 basic: logarithm
@@ -38,14 +40,36 @@ modif <- function(pred, type, data, co.r=NULL, sc.1=NULL, sc.2=NULL, pc.r=NULL, 
   df <- data
   x <- data[[pred]]
   
-  if(type == 1.1){
+  if(as.character(type) == "1.1"){
     df[[pred]] <- cs(data[[pred]], co.r, sc.1, sc.2)
-  }else if(type == 1.2){
+  }else if(as.character(type) == "1.2"){
     df[[pred]] <- cp(data[[pred]], co.r, pc.r)
+  }else if(as.character(type) == "0"){
+    df[[pred]] <- data[[pred]]
   }else{
-    opt <- substr(as.character(type),3,nchar(as.character(type)))
+    opt <- as.numeric(substr(as.character(type),3,nchar(as.character(type))))
     # turn 2.1.1~2.1.4 and 2.2~2.6 to 1.1~1.4 and 2~6
-    df[[pred]] <- bt(data[[pred]], opt, object)
+    i.colname <- colnames(df)
+    df <- cbind(df, bt(data[[pred]], opt, object))
+    
+    full.opt <- c("2.1.1","2.1.2","2.1.3","2.1.4","2.2","2.3","2.4","2.5","2.6")
+    opt <- letters[which(full.opt == as.character(type))]
+    object.bis <- if(length(object)>1){obj.name}else{gsub("-", "_", object)}
+    
+    pred.name <<- switch(opt,
+                        a = paste(pred, ".plus.", object.bis, sep = ""),
+                        b = paste(pred, ".mnus.", object.bis, sep = ""),
+                        c = paste(pred, ".mult.", object.bis, sep = ""),
+                        d = paste(pred, ".divi.", object.bis, sep = ""),
+                        e = paste(pred, ".loga.", sep = ""),
+                        f = paste(pred, ".pore.", object.bis, ")", sep = ""),
+                        g = paste(pred, ".powr.", object.bis, sep = ""),
+                        h = paste(pred, ".reci.", sep =""),
+                        i = paste(pred, ".tlag.", object.bis, sep = ""))
+        
+    colnames(df) <- c(i.colname, pred.name)
+    message('The transformed variable called "', pred.name, '" has been added to the dataset!', sep = "")
+    cat("\n")
   }
   
   return(df)
@@ -66,39 +90,46 @@ trial <- function(data, resp, fit = NULL, action = 2, pred = NULL) {
   
   if(is.null(fit)){ # if(exists("fit", mode = "list"))
     if(action == 1) {
-      lm(as.formula(sprintf('%s ~ 1', resp)), data = data, na.action = na.exclude)
+      fit.new <- lm(as.formula(sprintf('%s ~ 1', resp)), data = data, na.action = na.exclude)
     } else if(action == 2) {
-      lm(as.formula(sprintf('%s ~ %s + 0', resp, pred)), data = data, na.action = na.exclude)
+      fit.new <- lm(as.formula(sprintf('%s ~ %s + 0', resp, pred)), data = data, na.action = na.exclude)
     } else if(action == -1) {
-      lm(as.formula(sprintf('%s ~ -1', resp)), data = data, na.action = na.exclude)
+      fit.new <- lm(as.formula(sprintf('%s ~ -1', resp)), data = data, na.action = na.exclude)
     } else { # if(action == -2)
-      warning("There's no existed model to let you delete ", pred, " from!")
+      message("There's no existed model to let you delete ", pred, " from!", sep = "")
+      cat("\n")
+      fit.new <- fit
     }
     
   } else { #if(!is.null(fit))
     if(pred %in% names(coef(fit))) {
       if(action == -1) {
-        update(fit, ~. -1)
+        fit.new <- update(fit, ~. -1, data = data)
       } else if(action == -2) {
-        update(fit, as.formula(sprintf('~. - %s', pred)))
+        fit.new <- update(fit, as.formula(sprintf('~. - %s', pred)), data = data)
       } else {
-        warning(if(action == 1)"Intercept"else pred, " is already in the model!")
+        message("The ", pred, " is already in the model!", sep = "")
+        cat("\n")
+        fit.new <- fit
       }
     } else {
       if(action == 1){
-        update(fit, ~. +1)
+        fit.new <- update(fit, ~. + 1, data = data)
       } else if(action == 2){
-        update(fit, as.formula(sprintf('~. + %s', pred)))
+        fit.new <- update(fit, as.formula(sprintf('~. + %s', pred)), data = data)
       } else {
-        warning(if(action == -1)"Intercept"else pred, " isn't in the model!")
+        message("The ", pred, " isn't in the model!", sep = "")
+        cat("\n")
+        fit.new <- fit
       }
     }    
-  }    
+  }  
+  return(fit.new)
 }
 
 #----------------------------------------------------------------------------------
 
-recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
+recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
   #---------------------------------
   # pred: predictor to be inserted to the model, to be quoted. i.e.: "cly" (mtcars)
   # resp: response variable in the model, to be quoted. i.e.: "mpg" (mtcars)
@@ -260,12 +291,12 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
         paste(" - The recommended carryover rate is ", best.stats[1], sep=""),
         sep = "\n")
     
-    if(as.character(type)==1.1){
+    if(as.character(type)=="1.1"){
       cat(paste(" - The recommended lamda1(S-curve) is ", best.stats[2], sep = ""),
           paste(" - The recommended lamda2(S-curve) is ", best.stats[3], sep = ""),
           sep = "\n")
       curve.prmt <- c(best.stats[1], best.stats[2], best.stats[3], NA)
-    }else if(as.character(type)==1.2){
+    }else if(as.character(type)=="1.2"){
       cat(paste(" - The recommended power rate is ", best.stats[2], sep = ""),
           sep = "\n")
       curve.prmt <- c(best.stats[1], NA, NA, best.stats[2])
@@ -277,12 +308,12 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
         paste(" - The p-value of the coefficient is ", as.numeric(format(best.stats[ncol(prmt.all)-2],scientific=T))),
         paste(" - The r-squared of the model is ", round(best.stats[ncol(prmt.all)-1],4)),
         paste(" - The adjusted r-squared of the model is ", round(best.stats[ncol(prmt.all)],4)),
-        paste(" ", paste(rep("-",40), collapse = ""),sep = ""), sep = "\n")
+        paste(" ", paste(rep("-",40), collapse = ""),sep = ""),"", sep = "\n")
     
     if (best.stats[ncol(prmt.all)-2] > 0.2){
       message("Please be aware that the p-value of predictor coefficient is larger than 0.2!")
       message("The estimate of coefficient is not significant!")
-      cat("")
+      cat("\n")
     }
     
     
@@ -302,7 +333,7 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
   # Here the transformation type could be:
   # - 2.1.1~2.1.4 & 2.2~2.6: basic transformation
   # - 0: no transformation
-  testoth <- function(resp, x, pred, fit.coef = fit, type, data, object = object){
+  testoth <- function(resp, x, pred, fit.coef = fit, type, data, object = object, obj.name = obj.name){
     
     if (as.character(type) == "0"){
       x.new <- x
@@ -315,7 +346,7 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
     full.opt <- c("0","2.1.1","2.1.2","2.1.3","2.1.4","2.2","2.3","2.4","2.5","2.6")
     opt <- letters[which(full.opt == as.character(type))]
     
-    object.bis <- if(length(object)>1){"another variable"}else{object}
+    object.bis <- if(length(object)>1){obj.name}else{object}
     
     trans.opt <- switch(opt,
                         a = "No transformation",
@@ -324,21 +355,21 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
                         d = paste(pred, " times ", object.bis, sep = ""),
                         e = paste(pred, " divided by ", object.bis, sep = ""),
                         f = paste("Logarithm on ", pred, sep = ""),
-                        g = paste(pred, "to the square of ", object.bis, sep = ""),
-                        h = paste(pred, "to the power of ", object.bis, sep = ""),
+                        g = paste(pred, " to the power of 1/", object.bis, sep = ""),
+                        h = paste(pred, " to the power of ", object.bis, sep = ""),
                         i = paste("Reciprocal of ", pred, sep =""),
                         j = paste("Time lag for ", pred, " by ", object.bis, " time unit(s)", sep = ""))
     
     coef.new <- c(summary(fit.new)$coefficients[length(coef(fit.new)),1],summary(fit.new)$coefficients[length(coef(fit.new)),4],
                   summary(fit.new)$r.squared, summary(fit.new)$adj.r.squared)
     names(coef.new) <- c("coef", "p-value", "r.squared", "adjusted.r.squared")
-    cat("",
-        paste(" You choose to do: ", trans.opt, sep = ""),
-        paste(" ", paste(rep("-",40),collapse = ""), sep = ""),
-        paste(" The coefficient of ", pred, " in this model is ", round(coef.new[1],4), sep = ""),
-        paste(" The p-value of the coefficient is ", as.numeric(format(coef.new[2],scientific=T)), sep = ""),
-        paste(" The r-squared of the model is ", round(coef.new[3],4), sep = ""),
-        paste(" The adjusted r-squared of the model is ", round(coef.new[4],4), sep = ""),
+    cat(
+        paste("You choose to do: ", trans.opt, sep = ""),
+        paste(paste(rep("-",40),collapse = ""), sep = ""),
+        paste("The coefficient of ", pred, " in this model is ", round(coef.new[1],4), sep = ""),
+        paste("The p-value of the coefficient is ", as.numeric(format(coef.new[2],scientific=T)), sep = ""),
+        paste("The r-squared of the model is ", round(coef.new[3],4), sep = ""),
+        paste("The adjusted r-squared of the model is ", round(coef.new[4],4), sep = ""),
         "", sep = "\n")
     
     # return(list(coef.new, c(object, type)))
@@ -365,13 +396,11 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
     prmt.cp <- testall(resp, x, pred, fit.coef = fit, type = 1.2, data = df)
     if(as.numeric(prmt.cs[5]) > as.numeric(prmt.cp[5])){
       prmt.rec <- prmt.cs
-      cat("\n")
-      message("Concerning r-squared, the method **CARRYOVER + S-CURVE** is preferred.")
+      message("Concerning r-squared, the method **CARRY-OVER + S-CURVE** is preferred.")
       cat("\n")
     }else if(as.numeric(prmt.cs[5]) < as.numeric(prmt.cp[5])){
       prmt.rec <- prmt.cp
-      cat("\n")
-      message("Concerning r-squared, the method **CARRYOVER + POWER CURVE** is preferred.")
+      message("Concerning r-squared, the method **CARRY-OVER + POWER CURVE** is preferred.")
       cat("\n")
     }else{
       prmt.rec <- prmt.cp
@@ -381,7 +410,7 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL){
   }else{
     # modeling result of other transformation
     # caliberate the option number for type > 2
-    prmt.rec <- testoth(resp = resp, x, pred = pred, fit.coef = fit, type = type, data = df, object = object)
+    prmt.rec <- testoth(resp = resp, x, pred = pred, fit.coef = fit, type = type, data = df, object = object, obj.name = obj.name)
     
   }
   return(prmt.rec)
@@ -398,29 +427,93 @@ rebuild <- function(resp, data, prmt.name) {
   
   # need one step to confirm the model, then 
   # fit <- fit.temp; df <- df.temp
+  df.history <<- data
   
-  prmt.history <<- read.csv(paste(getwd(), "/", prmt.name, sep = ""))
-  prmt.alive <- prmt.history[prmt.history$status == "alive"]
+  prmt.history <<- as.data.frame(read.csv(paste(getwd(), "/", prmt.name, sep = "")),
+                                 stringsAsFactors = F)[,-1]
+  prmt.alive <- prmt.history[prmt.history$status == "alive",]
   
   for(i in 1:nrow(prmt.alive)) {
     
-    pred <- prmt.alive[[1]][i]
+    pred <- as.character(prmt.alive[[1]][i])
     type <- prmt.alive[[2]][i]
     co.r <- prmt.alive[[3]][i]
     sc.1 <- prmt.alive[[4]][i]
     sc.2 <- prmt.alive[[5]][i]
     pc.r <- prmt.alive[[6]][i]
-    object <- prmt.alive[[7]][i]
     
-    df.history <<- modif(pred, type, data, co.r, sc.1, sc.2, pc.r, object)
+    # object
+    obj.pre <- prmt.alive[[7]][i]
+    if(obj.pre %in% c("min", "max", "mean")){
+      if(obj.pre == "min"){
+        object <- min(data[[pred]])
+      } else if(obj.pre == "max"){
+        object <- max(data[[pred]])
+      } else if(obj.pre == "mean"){
+        object <- mean(data[[pred]])
+      }
+    } else if(obj.pre %in% names(data)) {
+      object <- data[[obj.pre]]
+    } else {
+      object <- as.numeric(obj.pre)
+    }
+    
+    df.history <<- modif(pred, type, df.history, co.r, sc.1, sc.2, pc.r, object)
     # type: character
   }
-  fit.history <<- lm(as.formula(paste(c(resp, paste(pred, collapse = " + ")), collapse = " ~ ")), data)
+  fit.history <<- lm(as.formula(paste(c(resp, paste(prmt.alive[[9]], collapse = " + ")), collapse = " ~ ")), data = df.history)
 }
+
+#----------------------------------------------------------------------------------
+
+warn <- function(fit1, fit2, p.cons = 0.2) {
+  # 1. warn user when there is some coefficient which changes **sign** between two models
+  # 2. warn user when there is big gap between **p-value** of one pred in two models 
+  
+  
+  if(!is.null(names(coef(fit2)))) {
+    
+    coef2 <- coef(fit2)
+    name2 <- names(coef2)
+    p.value2 <- coef(summary(fit2))[, 4]
+    
+    if(sum(p.value2 > p.cons) > 0){
+      message("P-value of the following predictor", 
+              if(sum(p.value2 > p.cons) > 1) "s are" else " is", 
+              " larger than ", as.character(p.cons), sep = "")
+      cat(paste(names(p.value2)[p.value2 > p.cons], collapse = ", "), "", sep = "\n")
+      cat(paste(rep("-", 40), collapse = ""), "", sep = "\n")
+    }
+    
+    
+    if(!is.null(names(coef(fit1)))){
+      coef1 <- coef(fit1)    
+      name1 <- names(coef1)
+      p.value1 <- coef(summary(fit1))[, 4]
+      
+      name <- intersect(name1, name2)
+      
+      sign1 <- sign(coef1[which(name1 %in% name)])
+      sign1 <- sign1[order(names(sign1))]
+      
+      sign2 <- sign(coef2[which(name2 %in% name)])
+      sign2 <- sign2[order(names(sign2))]
+      
+      if(any(sign1 * sign2 == -1)) {
+        message("Sign of the following predictor's coefficient has changed!", sep = "")
+        cat(paste(names(sign1)[sign1 * sign2 == -1], collapse = ", "), "", sep = "\n")
+        cat(paste(rep("-", 40), collapse = ""), "", sep = "\n")
+      }
+    } 
+    
+  } 
+  
+} # end function warn()
 
 #----------------------------------------------------------------------------------
 # modif: created 11/12/2014 by Elliott
 # trial: created 11/12/2014 by Katherine
 # recom: created 11/13/2014 and modified 11/17/2014 by Elliott
 # rebuild: created 11/12/2014 by Katherine
+# warn: created 11/17/2014 by Katherine
 #----------------------------------------------------------------------------------
