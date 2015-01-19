@@ -178,5 +178,20 @@ bt <- function(x, type, object = NULL){
 
 #=====================================================================
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # CREATION 11/7/2014: co(),sc(),pc(),bt() creation
 # UPDATE 11/10/2014: cs(), cp() creation (replace the functionality of sc() and pc())

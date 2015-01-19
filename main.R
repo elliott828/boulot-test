@@ -129,7 +129,7 @@ trial <- function(data, resp, fit = NULL, action = 2, pred = NULL) {
 
 #----------------------------------------------------------------------------------
 
-recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
+recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name, st.row){
   #---------------------------------
   # pred: predictor to be inserted to the model, to be quoted. i.e.: "cly" (mtcars)
   # resp: response variable in the model, to be quoted. i.e.: "mpg" (mtcars)
@@ -165,15 +165,18 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
   #---------------------------------
   
   # Load the data
-  df <- data
-  x <- df[[pred]]
-  y <- df[[resp]]
+  df0 <- data
+  df1 <- df0[st.row:dim(df0)[1], ]
+  x0 <- df0[[pred]]
+  y0 <- df0[[resp]]
+  x1 <- x0[st.row:length(x0)]
+  y1 <- y0[st.row:length(y0)]
   
   # The default parameter ranges are as below:
   # (To be modified on demand)
   co.range <- seq(0.05, 0.95, 0.05)  # 
-  lamda1.range <- seq(0.0001, 0.0009, 0.0001)
-  lamda2.range <- seq(1.1, 1.9, 0.1)
+  lamda1.range <- seq(0.0001, 0.0007, 0.0001)
+  lamda2.range <- seq(1.1, 1.7, 0.1)
   pc.range <- seq(0.4, 0.95, 0.05)
   
   #---------------------------------#
@@ -253,8 +256,9 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
                   B = "Carryover + Power curve")
     
     prmt <- mat[1:len,]    # capture the parameter combinations
-    var <- as.data.frame(mat[(len+1):nrow(mat),])    # capture the transfored variables
+    var0 <- as.data.frame(mat[(len+1):nrow(mat),])    # capture the transfored variables
     #colnames(var) <- paste(pred, 1:ncol(var), sep = "")
+    var <- var0[st.row:dim(var0)[1], ]
     
     test.stats <- t(sapply(var, summary.stats, resp = resp, pred = pred, fit.coef = fit.coef, data = data))
     # coef <- test.stats[1:2]
@@ -262,66 +266,76 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
     # adj.rsq <- test.stats[4]
     
     prmt.all <- as.data.frame(cbind(t(prmt), test.stats))
-    curve.prmt <- if(len == 2){"exponent"}else{c("lamda1","lamda2")}
-    colnames(prmt.all) <- c("carryover.rate",curve.prmt,"coef","p-value","r.squared","adjusted.r.squared")
-    rownames(prmt.all) <- NULL
-    
-    # export all parameters and related model statistics to local working directory
-    write.csv(prmt.all, paste("prmt", nam, pred, "csv",sep = "."))
-    cat("\n")
-    message(paste("The parameter reference: 'prmt", nam, pred, "csv' is exported!",sep = "."))
-    
-    # capture the best group of parameters
-    # get the best adj. r squared first then allocate the position
-    best <- max(prmt.all[,ncol(prmt.all)])
-    posi <- which(round(prmt.all$adjusted.r.squared,6)==round(best,6))
-    if (length(posi)>1)posi <- sample(posi,1)
-    best.stats <- prmt.all[posi,]
-    rownames(best.stats) <- NULL   # remove the row index assigned automatically by the program
-    
-    # print(paste("the size of prmt.all is ", paste(dim(prmt.all),collapse=" and "),sep=""))
-    # print(paste("the value of best is ", best,sep=""))
-    # print(paste("the best row number is ", which(round(prmt.all$adjusted.r.squared,6)==round(best,6)), sep =""))
-    # print(paste("the size of best.stats is ", paste(dim(best.stats),collapse=" and "),sep=""))
-    
-    # print the message indicating the best transformation parameters and results
-    cat("",
-        paste(" For the transformation method ", met, ":", sep=""),
-        paste(" ", paste(rep("-",40), collapse = ""),sep = ""),
-        paste(" - The recommended carryover rate is ", best.stats[1], sep=""),
-        sep = "\n")
-    
-    if(as.character(type)=="1.1"){
-      cat(paste(" - The recommended lamda1(S-curve) is ", best.stats[2], sep = ""),
-          paste(" - The recommended lamda2(S-curve) is ", best.stats[3], sep = ""),
-          sep = "\n")
-      curve.prmt <- c(best.stats[1], best.stats[2], best.stats[3], NA)
-    }else if(as.character(type)=="1.2"){
-      cat(paste(" - The recommended power rate is ", best.stats[2], sep = ""),
-          sep = "\n")
-      curve.prmt <- c(best.stats[1], NA, NA, best.stats[2])
-    }
-    
-    cat(paste(" ", paste(rep("-",40), collapse = ""),sep = ""),"\n")
-    
-    cat(paste(" - The coefficient of ", pred, " in this model is ", round(best.stats[ncol(prmt.all)-3],4)),
-        paste(" - The p-value of the coefficient is ", as.numeric(format(best.stats[ncol(prmt.all)-2],scientific=T))),
-        paste(" - The r-squared of the model is ", round(best.stats[ncol(prmt.all)-1],4)),
-        paste(" - The adjusted r-squared of the model is ", round(best.stats[ncol(prmt.all)],4)),
-        paste(" ", paste(rep("-",40), collapse = ""),sep = ""),"", sep = "\n")
-    
-    if (best.stats[ncol(prmt.all)-2] > 0.2){
-      message("Please be aware that the p-value of predictor coefficient is larger than 0.2!")
-      message("The estimate of coefficient is not significant!")
+    prmt.all <- prmt.all[complete.cases(prmt.all), ]
+    if(nrow(prmt.all) == 0){
+      op.recom <- as.data.frame(matrix(1, nrow = 1, ncol = 9))
+      message("This variable cannot get into the model!\n")
+      message("Please switch another variable!\n")
+    } else {
+      curve.prmt <- if(len == 2){"exponent"}else{c("lamda1","lamda2")}
+      colnames(prmt.all) <- c("carryover.rate",curve.prmt,"coef","p-value","r.squared","adjusted.r.squared")
+      rownames(prmt.all) <- NULL
+      
+      # export all parameters and related model statistics to local working directory
+      write.csv(prmt.all, paste("prmt", nam, pred, "csv",sep = "."))
       cat("\n")
+      message(paste("The parameter reference: 'prmt", nam, pred, "csv' is exported!",sep = "."))
+      
+      # capture the best group of parameters
+      # get the best adj. r squared first then allocate the position
+      best <- max(as.numeric(prmt.all[, ncol(prmt.all)]))
+      posi <- which(round(prmt.all$adjusted.r.squared,6)==round(best,6))
+      if (length(posi)>1)posi <- sample(posi,1)
+      best.stats <- prmt.all[posi,]
+      rownames(best.stats) <- NULL   # remove the row index assigned automatically by the program
+      
+      # print(paste("the size of prmt.all is ", paste(dim(prmt.all),collapse=" and "),sep=""))
+      # print(paste("the value of best is ", best,sep=""))
+      # print(paste("the best row number is ", which(round(prmt.all$adjusted.r.squared,6)==round(best,6)), sep =""))
+      # print(paste("the size of best.stats is ", paste(dim(best.stats),collapse=" and "),sep=""))
+      
+      # print the message indicating the best transformation parameters and results
+      cat("",
+          paste(" For the transformation method ", met, ":", sep=""),
+          paste(" ", paste(rep("-",40), collapse = ""),sep = ""),
+          paste(" - The recommended carryover rate is ", best.stats[1], sep=""),
+          sep = "\n")
+      
+      if(as.character(type)=="1.1"){
+        cat(paste(" - The recommended lamda1(S-curve) is ", best.stats[2], sep = ""),
+            paste(" - The recommended lamda2(S-curve) is ", best.stats[3], sep = ""),
+            sep = "\n")
+        curve.prmt <- c(best.stats[1], best.stats[2], best.stats[3], NA)
+      }else if(as.character(type)=="1.2"){
+        cat(paste(" - The recommended power rate is ", best.stats[2], sep = ""),
+            sep = "\n")
+        curve.prmt <- c(best.stats[1], NA, NA, best.stats[2])
+      }
+      
+      cat(paste(" ", paste(rep("-",40), collapse = ""),sep = ""),"\n")
+      
+      cat(paste(" - The coefficient of ", pred, " in this model is ", round(best.stats[ncol(prmt.all)-3],4)),
+          paste(" - The p-value of the coefficient is ", as.numeric(format(best.stats[ncol(prmt.all)-2],scientific=T))),
+          paste(" - The r-squared of the model is ", round(best.stats[ncol(prmt.all)-1],4)),
+          paste(" - The adjusted r-squared of the model is ", round(best.stats[ncol(prmt.all)],4)),
+          paste(" ", paste(rep("-",40), collapse = ""),sep = ""),"", sep = "\n")
+      
+      if(is.na(best.stats[ncol(prmt.all)-2])){
+        message("This variable is not advised to be added to the model!\n")
+      }else if (best.stats[ncol(prmt.all)-2] > 0.2){
+        message("Please be aware that the p-value of predictor coefficient is larger than 0.2!")
+        message("The estimate of coefficient is not significant!")
+        cat("\n")
+      }
+      
+      # return(list(prmt.all, best.stats)) return the variable transformed by all combination of parameters
+      op.recom <- c(type, best.stats[ncol(prmt.all)-3], best.stats[ncol(prmt.all)-2], 
+                    best.stats[ncol(prmt.all)-1], best.stats[ncol(prmt.all)], curve.prmt)
+      
+      names(op.recom) <- c("Trans.Type","Coef","P.Value","R.Sq","Adj.R.Sq","Carryover.Rate",
+                           "Lamda1","Lamda2","Power.Rate")
     }
-    
-    
-    # return(list(prmt.all, best.stats)) return the variable transformed by all combination of parameters
-    op.recom <- c(type, best.stats[ncol(prmt.all)-3], best.stats[ncol(prmt.all)-2], 
-                  best.stats[ncol(prmt.all)-1], best.stats[ncol(prmt.all)], curve.prmt)
-    names(op.recom) <- c("Trans.Type","Coef","P.Value","R.Sq","Adj.R.Sq","Carryover.Rate",
-                         "Lamda1","Lamda2","Power.Rate")
+
     return(op.recom)
     
     # write.csv(var, paste("transformation",pred,"csv",sep="."))
@@ -386,15 +400,18 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
   
   if(as.character(type) == "1.1"){
     # carryover + s-curve only
-    prmt.rec <- testall(resp, x, pred, fit.coef = fit, type = 1.1, data = df)
+    prmt.rec <- testall(resp, x0, pred, fit.coef = fit, type = 1.1, data = df1)
   }else if(as.character(type) == "1.2"){
     # carryover + power curve only
-    prmt.rec <- testall(resp, x, pred, fit.coef = fit, type = 1.2, data = df)
+    prmt.rec <- testall(resp, x0, pred, fit.coef = fit, type = 1.2, data = df1)
   }else if(as.character(type) == "1.3"){
     # compary carryover + s-cu4ve and carryover + power curve 
-    prmt.cs <- testall(resp, x, pred, fit.coef = fit, type = 1.1, data = df)
-    prmt.cp <- testall(resp, x, pred, fit.coef = fit, type = 1.2, data = df)
-    if(as.numeric(prmt.cs[5]) > as.numeric(prmt.cp[5])){
+    prmt.cs <- testall(resp, x0, pred, fit.coef = fit, type = 1.1, data = df1)
+    prmt.cp <- testall(resp, x0, pred, fit.coef = fit, type = 1.2, data = df1)
+    if(is.na(prmt.cs[2])|is.na(prmt.cs[2])){
+      prmt.rec <- as.list(rep(NA,9))
+      message("There is no recommendation!\n")
+    }else if(as.numeric(prmt.cs[5]) > as.numeric(prmt.cp[5])){
       prmt.rec <- prmt.cs
       message("Concerning r-squared, the method **CARRY-OVER + S-CURVE** is preferred.")
       cat("\n")
@@ -402,7 +419,7 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
       prmt.rec <- prmt.cp
       message("Concerning r-squared, the method **CARRY-OVER + POWER CURVE** is preferred.")
       cat("\n")
-    }else{
+    }else if(as.numeric(prmt.cs[5]) == as.numeric(prmt.cp[5])){
       prmt.rec <- prmt.cp
       message("Both transformation methods are OK for the model.")
       cat("\n")
@@ -410,7 +427,7 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
   }else{
     # modeling result of other transformation
     # caliberate the option number for type > 2
-    prmt.rec <- testoth(resp = resp, x, pred = pred, fit.coef = fit, type = type, data = df, object = object, obj.name = obj.name)
+    prmt.rec <- testoth(resp = resp, x1, pred = pred, fit.coef = fit, type = type, data = df1, object = object, obj.name = obj.name)
     
   }
   return(prmt.rec)
@@ -419,7 +436,7 @@ recom <- function(pred, resp, data, type, fit = NULL, object = NULL, obj.name){
 
 #----------------------------------------------------------------------------------
 
-rebuild <- function(resp, data, prmt.name) {
+rebuild <- function(resp, data, prmt.name, st.row) {
   
   # resp and data is already in the global environment
   # data is raw without modification
@@ -427,11 +444,11 @@ rebuild <- function(resp, data, prmt.name) {
   
   # need one step to confirm the model, then 
   # fit <- fit.temp; df <- df.temp
-  df.history <<- data
+  df.history0 <<- data
   
   prmt.history <<- as.data.frame(read.csv(paste(getwd(), "/", prmt.name, sep = "")),
                                  stringsAsFactors = F)[,-1]
-  prmt.alive <- prmt.history[prmt.history$status == "alive",]
+  prmt.alive <<- prmt.history[which(prmt.history[[8]] == "alive"),]
   
   for(i in 1:nrow(prmt.alive)) {
     
@@ -458,10 +475,12 @@ rebuild <- function(resp, data, prmt.name) {
       object <- as.numeric(obj.pre)
     }
     
-    df.history <<- modif(pred, type, df.history, co.r, sc.1, sc.2, pc.r, object)
+    df.history0 <<- modif(pred, type, df.history0, co.r, sc.1, sc.2, pc.r, object)
     # type: character
   }
-  fit.history <<- lm(as.formula(paste(c(resp, paste(prmt.alive[[9]], collapse = " + ")), collapse = " ~ ")), data = df.history)
+  df.history <<- df.history0[st.row:dim(df.history0)[1], ]
+  fit.history <<- lm(as.formula(paste(paste(c(resp, paste(prmt.alive[[9]], collapse = " + ")), collapse = " ~ "), " - 1", sep = "")), 
+                     data = df.history, na.action = na.exclude)
 }
 
 #----------------------------------------------------------------------------------
@@ -515,5 +534,6 @@ warn <- function(fit1, fit2, p.cons = 0.2) {
 # trial: created 11/12/2014 by Katherine
 # recom: created 11/13/2014 and modified 11/17/2014 by Elliott
 # rebuild: created 11/12/2014 by Katherine
+#          updated 12/19/2014: change fit.history into with no intercept to avoid annoyed message
 # warn: created 11/17/2014 by Katherine
 #----------------------------------------------------------------------------------
